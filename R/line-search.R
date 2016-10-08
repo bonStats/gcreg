@@ -36,8 +36,3 @@ gen_line_search <- function(oracle_fun, EPS = 1e-05, max_it = 200, ...) {
     
   }
 }
-
-mono_ls <- gen_line_search(oracle_fun = is_monotone, region = c(0,1))
-mono_ls(cur = 0:5, aim = c(0,1,2,3,4,-5),index = 6)
-
-is_monotone(c(0:4,-4.99999),region = c(0,1))
