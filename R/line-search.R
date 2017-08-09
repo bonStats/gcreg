@@ -9,30 +9,32 @@
 #' mono_ls <- gen_line_search(oracle_fun = is_monotone, region = c(0,1))
 #' mono_ls(cur = 0:5, aim = c(0,1,2,3,4,-5),index = 6)
 
-gen_line_search <- function(oracle_fun, EPS = 1e-05, max_it = 200, ...) {
+gen_line_search <- function(oracle_fun, EPS = 1e-05, maxit = 200, ...) {
   
-  function(cur, index, aim){
+  oracle_ <- oracle_fun
+  
+  function(index, cur, aim){
     
-    .cur <- matrix(cur,ncol = 1)
-    .aim <- matrix(aim,ncol = 1)
+    cur_ <- matrix(cur,ncol = 1)
+    aim_ <- matrix(aim,ncol = 1)
     
     i <- 1
-    while(i < max_it & abs(.cur[index,] - .aim[index,]) > EPS){
+    while(i < maxit & abs(cur_[index,] - aim_[index,]) > EPS){
       i <- i + 1
-      test_par <- replace(.cur, index, (.cur[index,] + .aim[index,])/2)
+      test_par <- replace(cur_, index, (cur_[index,] + aim_[index,])/2)
       
-      if(oracle_fun(test_par,...)){
-        .cur <- test_par
+      if(oracle_(test_par)){
+        cur_ <- test_par
       } else {
-        .aim <- test_par
+        aim_ <- test_par
       }
       
     }
     
-    attr(.cur,"convg") <- abs(.cur[index,] - .aim[index,]) <= EPS
-    attr(.cur,"iter") <- i
+    attr(cur_,"convg") <- abs(cur_[index,] - aim_[index,]) <= EPS
+    attr(cur_,"iter") <- i
     
-    return(.cur)
+    return(cur_)
     
   }
 }
