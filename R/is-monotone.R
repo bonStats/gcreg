@@ -11,7 +11,7 @@
 is_monotone <- function(p, region = c(-Inf,Inf), type = NULL, EPS = 1e-05){
   
   # Checks
-  pl <- as.polynomial(p)
+  pl <- polynom::as.polynomial(p)
   if(length(region) != 2 | ! is.numeric(region)){
     r <- dput(region)
     stop("Argument in wrong format. region = c(-1,1) for example.")
@@ -29,7 +29,7 @@ is_monotone <- function(p, region = c(-Inf,Inf), type = NULL, EPS = 1e-05){
   a <- min(region)
   b <- max(region)
   
-  D_pl <- deriv(pl)
+  D_pl <- polynom:::deriv.polynomial(pl)
   
   # roots of derivative of pl
   roots <- polyroot(D_pl)

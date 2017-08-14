@@ -49,7 +49,7 @@ cpm <- function(formula, data, subset, weights, na.action,
   
   poly_basis <- make_disc_orthonormal_basis(x, deg = degree)
   
-  Xo <- sapply(poly_basis, predict, newdata = x)
+  Xo <- sapply(poly_basis, polynom:::predict.polynomial, newdata = x)
   
   # grab or set initial value par
   

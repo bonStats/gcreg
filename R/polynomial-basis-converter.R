@@ -5,7 +5,7 @@
 
 gen_poly_basis_converters <- function(poly_basis){
   
-  if(!is.polylist(poly_basis)) warning("poly_basis should be polylist object")
+  if(!polynom::is.polylist(poly_basis)) warning("poly_basis should be polylist object")
   
   dm <- length(poly_basis)
   

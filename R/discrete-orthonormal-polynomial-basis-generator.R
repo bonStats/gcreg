@@ -1,8 +1,8 @@
-#' Create discrete (data-based) orthonormal polynomial basis
+#' Create discrete (data-based) orthonormal polynom::polynomial basis
 #' 
 #' @param x data to generat
-#' @param deg Highest degree of polynomials
-#' @return polylist (list of polynomials) defining orthonormal basis
+#' @param deg Highest degree of polynom::polynomials
+#' @return polylist (list of polynom::polynomials) defining orthonormal basis
 #' @examples
 #' To do
 #' t(X) %*% X = diag()
@@ -21,16 +21,16 @@ make_disc_orthonormal_basis <- function(x, deg){
   p_basis <- vector(mode = "list", length = deg + 1)
   
   # initial polynomials
-  p_basis[[1]] <- polynomial(b_scale)
-  p_basis[[2]] <- polynomial(c(-b_scale*inv_s_sd*mean(x),b_scale*inv_s_sd))
+  p_basis[[1]] <- polynom::polynomial(b_scale)
+  p_basis[[2]] <- polynom::polynomial(c(-b_scale*inv_s_sd*mean(x),b_scale*inv_s_sd))
   
   # initialise vector for leading coefficients
   p_lc <- lapply(p_basis, FUN = get_lc)
-  # create rest of polys
+  # create rest of polys (NEED TO CHANGE "*" to operation explicitly from polynom)
   for( i in 3:(deg+1) ){
-    term1 <- - calc_poly_disc_inner_prod(p1 = p_basis[[i-1]] * polynomial(c(0,1)),
+    term1 <- - calc_poly_disc_inner_prod(p1 = p_basis[[i-1]] * polynom::polynomial(c(0,1)),
                                          p2 = p_basis[[i-1]], x = x) * p_basis[[i-1]]
-    term2 <- p_basis[[i-1]] * polynomial(c(0,1))
+    term2 <- p_basis[[i-1]] * polynom::polynomial(c(0,1))
     term3 <- - p_basis[[i-2]] * p_lc[[i-2]] / p_lc[[i-1]]
     
     p_basis[[i]] <- (term1 + term2 + term3) / p_lc[[i-1]]
@@ -82,13 +82,13 @@ get_lc <- function(p) {
 #   p_basis <- vector(mode = "list", length = deg + 1)
 #   
 #   # initial polynomials
-#   p_basis[[1]] <- polynomial(b_scale)
-#   p_basis[[2]] <- polynomial(c(-b_scale*inv_s_sd*mean(x),b_scale*inv_s_sd))
+#   p_basis[[1]] <- polynom::polynomial(b_scale)
+#   p_basis[[2]] <- polynom::polynomial(c(-b_scale*inv_s_sd*mean(x),b_scale*inv_s_sd))
 #   
 #   # create rest of polys
 #   for( i in 3:(deg+1) ){
-#     term1 <- - calc_poly_disc_inner_prod(p1 = p_basis[[i-1]] * polynomial(c(0,1)),p2 = p_basis[[i-1]], x = x) * p_basis[[i-1]]
-#     term2 <- p_basis[[i-1]] * polynomial(c(0,1))
+#     term1 <- - calc_poly_disc_inner_prod(p1 = p_basis[[i-1]] * polynom::polynomial(c(0,1)),p2 = p_basis[[i-1]], x = x) * p_basis[[i-1]]
+#     term2 <- p_basis[[i-1]] * polynom::polynomial(c(0,1))
 #     term3 <- - p_basis[[i-2]] * get_lc(p_basis[[i-2]])  / get_lc(p_basis[[i-1]]) 
 #     
 #     p_basis[[i]] <- (term1 + term2 + term3) / get_lc(p_basis[[i-1]]) 
