@@ -3,6 +3,7 @@
 #' @param x data to generat
 #' @param deg Highest degree of polynom::polynomials
 #' @return polylist (list of polynom::polynomials) defining orthonormal basis
+#' @export
 #' @examples
 #' To do
 #' t(X) %*% X = diag()

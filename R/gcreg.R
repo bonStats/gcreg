@@ -3,5 +3,5 @@
 #'
 #' @docType package
 #' @name gcreg
-#' @importFrom polynom Ops
+#' @import polynom
 NULL

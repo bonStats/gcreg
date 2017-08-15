@@ -2,6 +2,7 @@
 #' 
 #' @param poly_basis polylist defining the orthonormal basis to be used in conversions
 #' @return list of length 2 with functions having names 'to_mono' (conversion to monomial basis) and 'to_ortho' (conversion to orthonormal basis)
+#' @export
 
 gen_poly_basis_converters <- function(poly_basis){
   

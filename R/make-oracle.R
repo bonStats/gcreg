@@ -2,6 +2,7 @@
 #' 
 #' @param ... oracle functions to be combined
 #' @return function that returns TRUE if point satisfies oracle
+#' @export
 #' @examples
 #' To do
 #'

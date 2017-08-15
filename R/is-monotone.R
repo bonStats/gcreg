@@ -4,6 +4,7 @@
 #' @param region numeric is polynomial monotone over this region.
 #' @param type character one of "increasing", "decreasing" or NULL
 #' @return TRUE if polynomial is monotone within region, FALSE otherwise.
+#' @export
 #' @examples
 #' pol <- polynomial(c(1,4,5,2))
 #' is_monotone(pol, region = c(1,5))

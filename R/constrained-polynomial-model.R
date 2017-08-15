@@ -8,7 +8,7 @@
 #' @param constraint an optional character string of "monotone" or "convex"
 #' @param oracle an optional function of class "oracle", returning TRUE when a given point is inside the constrained set and FALSE otherwise.
 #' @param ... arguments to be passed to control_cols()
-#'
+#' @export
 
 cpm <- function(formula, data, subset, weights, na.action,
                 degree, constraint = NULL, oracle = NULL, ...) {

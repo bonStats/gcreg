@@ -6,6 +6,7 @@
 #' @param step_start the initial step size taken.
 #' @param step_increment how step size increases over iterations.
 #' @return a list of control parameters.
+#' @export
 #' @examples
 #' TO DO
 
