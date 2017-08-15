@@ -1,8 +1,8 @@
 #' Create discrete (data-based) orthonormal polynom::polynomial basis
 #' 
 #' @param x data to generat
-#' @param deg Highest degree of polynom::polynomials
-#' @return polylist (list of polynom::polynomials) defining orthonormal basis
+#' @param deg Highest degree of polynomials.
+#' @return polylist polynomials from polynom package defining orthonormal basis
 #' @export
 #' @examples
 #' To do
@@ -27,7 +27,7 @@ make_disc_orthonormal_basis <- function(x, deg){
   
   # initialise vector for leading coefficients
   p_lc <- lapply(p_basis, FUN = get_lc)
-  # create rest of polys (NEED TO CHANGE "*" to operation explicitly from polynom)
+  # create rest of polys (Polynomial operations done by Depends: polynom)
   for( i in 3:(deg+1) ){
     term1 <- - calc_poly_disc_inner_prod(p1 = p_basis[[i-1]] * polynom::polynomial(c(0,1)),
                                          p2 = p_basis[[i-1]], x = x) * p_basis[[i-1]]
