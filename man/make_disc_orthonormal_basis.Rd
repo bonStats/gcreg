@@ -10,10 +10,10 @@ make_disc_orthonormal_basis(x, deg)
 \arguments{
 \item{x}{data to generat}
 
-\item{deg}{Highest degree of polynom::polynomials}
+\item{deg}{Highest degree of polynomials.}
 }
 \value{
-polylist (list of polynom::polynomials) defining orthonormal basis
+polylist polynomials from polynom package defining orthonormal basis
 }
 \description{
 Create discrete (data-based) orthonormal polynom::polynomial basis
