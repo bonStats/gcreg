@@ -3,7 +3,7 @@
 %   R/discrete-orthonormal-polynomial-basis-generator.R
 \name{make_disc_orthonormal_basis}
 \alias{make_disc_orthonormal_basis}
-\title{Create discrete (data-based) orthonormal polynom::polynomial basis}
+\title{Create discrete (data-based) orthonormal polynomial basis}
 \usage{
 make_disc_orthonormal_basis(x, deg)
 }
@@ -16,10 +16,11 @@ make_disc_orthonormal_basis(x, deg)
 polylist polynomials from polynom package defining orthonormal basis
 }
 \description{
-Create discrete (data-based) orthonormal polynom::polynomial basis
+Create discrete (data-based) orthonormal polynomial basis
 }
 \examples{
-#To do
-#t(X) \%*\% X = diag()
-#crossprod(X) == diag()
+x <- runif(100, min = -1, max = 1)
+p_basis <- make_disc_orthonormal_basis(x = x, deg = 9)
+Xo <- sapply(p_basis, predict, newdata = x)
+all.equal(diag(length(p_basis)), crossprod(Xo), tolerance = 1e-10)
 }

@@ -1,22 +1,29 @@
-#' Create discrete (data-based) orthonormal polynom::polynomial basis
+#' Create discrete (data-based) orthonormal polynomial basis
 #' 
 #' @param x data to generat
 #' @param deg Highest degree of polynomials.
 #' @return polylist polynomials from polynom package defining orthonormal basis
 #' @export
 #' @examples
-#' #To do
-#' #t(X) %*% X = diag()
-#' #crossprod(X) == diag()
+#' x <- runif(100, min = -1, max = 1)
+#' p_basis <- make_disc_orthonormal_basis(x = x, deg = 9)
+#' Xo <- sapply(p_basis, predict, newdata = x)
+#' all.equal(diag(length(p_basis)), crossprod(Xo), tolerance = 1e-10)
+
 
 make_disc_orthonormal_basis <- function(x, deg){
   
+  if(max(abs(x)) > 1) warning("x values outside of [-1,1] may lead to numerically unstable results, scale the data.")
+  
   # data length
   len <- length(x)
+  
+  if(len <= deg + 1) stop("Length of x must be greater than degree of polynomial")
+  
   # basis scale
   b_scale <- 1/sqrt(len)
   # inverse of sample SD
-  inv_s_sd <- (var(x) * (len - 1)/len)^(-1/2)
+  inv_s_sd <- (var(x) * (1 - 1/len))^(-1/2)
   
   # initialise discrete orthonormal polynomial list
   p_basis <- vector(mode = "list", length = deg + 1)
@@ -45,7 +52,7 @@ make_disc_orthonormal_basis <- function(x, deg){
 }
 
 
-#helper functions
+## helper functions ##
 
 calc_poly_disc_inner_prod <- function(p1,p2,x){
   
