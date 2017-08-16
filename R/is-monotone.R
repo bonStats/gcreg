@@ -3,6 +3,7 @@
 #' @param p polynomial
 #' @param region numeric is polynomial monotone over this region.
 #' @param type character one of "increasing", "decreasing" or NULL
+#' @param EPS numerical precision
 #' @return TRUE if polynomial is monotone within region, FALSE otherwise.
 #' @export
 #' @examples
@@ -30,7 +31,7 @@ is_monotone <- function(p, region = c(-Inf,Inf), type = NULL, EPS = 1e-05){
   a <- min(region)
   b <- max(region)
   
-  D_pl <- polynom:::deriv.polynomial(pl)
+  D_pl <- deriv(pl) # polynom:::deriv.polynomial()
   
   # roots of derivative of pl
   roots <- polyroot(D_pl)

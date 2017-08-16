@@ -4,7 +4,8 @@
 #' @param data an optional data frame, list or environment (or object coercible by as.data.frame to a data frame) containing the variables in the model. If not found in data, the variables are taken from environment(formula), typically the environment from which the function is called.
 #' @param subset an optional vector specifying a subset of observations to be used in the fitting process.
 #' @param weights NOT IMPLEMENTED
-#' @param na.action a function which indicates what should happen when the data contain NAs. The default is set by the na.action setting of options, and is na.fail if that is unset. The ‘factory-fresh’ default is na.omit. Another possible value is NULL, no action. Value na.exclude can be useful.
+#' @param na.action a function which indicates what should happen when the data contain NAs. The default is set by the na.action setting of options, and is na.fail if that is unset. The 'factory-fresh' default is na.omit. Another possible value is NULL, no action. Value na.exclude can be useful.
+#' @param degree degree of polynomial to be fit
 #' @param constraint an optional character string of "monotone" or "convex"
 #' @param oracle an optional function of class "oracle", returning TRUE when a given point is inside the constrained set and FALSE otherwise.
 #' @param ... arguments to be passed to control_cols()
@@ -49,7 +50,7 @@ cpm <- function(formula, data, subset, weights, na.action,
   
   poly_basis <- make_disc_orthonormal_basis(x, deg = degree)
   
-  Xo <- sapply(poly_basis, polynom:::predict.polynomial, newdata = x)
+  Xo <- sapply(poly_basis, predict, newdata = x) # polynom:::predict.polynomial
   
   # grab or set initial value par
   

@@ -5,7 +5,7 @@ Version: 0.1.0
 Author: Joshua Bon
 Maintainer: Joshua Bon <joshuajbon@gmail.com>
 Description: Fitting fixed effects polynomial models with general (closed & convex) constraints, such as monotonicity.
-License: GPL-3.0
+License: GPL-3 + file LICENSE
 LazyData: TRUE
 URL: http://github.com/bonStats/gcreg/
 BugReports: http://github.com/bonStats/gcreg/issues

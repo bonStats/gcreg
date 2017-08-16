@@ -1,13 +1,11 @@
 #' Search for boundary of permissible region between current value and desired value.
 #' 
 #' @param oracle_fun oracle function to determine membership to constrained space.
+#' @param EPS precision of line search algorithm
+#' @param maxit maximum number of iterations
+#' @param ... extra arguments. Currently ignored.
 #' @return Function to conduct line search with specified parameters.
-#' @examples
-#' mono_ls <- gen_line_search(oracle_fun = is_monotone)
-#' mono_ls(cur = 0:5, aim = c(0,1,2,3,4,-5),index = 6)
-#' 
-#' mono_ls <- gen_line_search(oracle_fun = is_monotone, region = c(0,1))
-#' mono_ls(cur = 0:5, aim = c(0,1,2,3,4,-5),index = 6)
+
 
 gen_line_search <- function(oracle_fun, EPS = 1e-05, maxit = 200, ...) {
   

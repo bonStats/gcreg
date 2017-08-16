@@ -8,7 +8,7 @@
 #' @param ... additional parameters passed to control if not specified.
 #' @return contrained minimum solution.
 #' @examples
-#' TO DO
+#' #TO DO
 
 # basic implementation
 optim_COLS <- function(par, Y, X, oracle_fun, control = cols_control(...), ...) {
@@ -37,7 +37,7 @@ optim_COLS <- function(par, Y, X, oracle_fun, control = cols_control(...), ...) 
   # decide which method to use and set function
   if(control$method == "best-step"){
     
-    find_gamma <- function(cur, index = 0) { # index not used (change to ...)
+    find_gamma <- function(cur, index) { # index not used
       
       pot_new_gammas <- lapply(1:p, FUN = ls_find, cur = cur, aim = aim_gamma)
       

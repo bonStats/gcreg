@@ -4,7 +4,7 @@
 #' @return function that returns TRUE if point satisfies oracle
 #' @export
 #' @examples
-#' To do
+#' #To do
 #'
 
 combine_oracles <- function(...) { # turn into combine.oracle? test if is oracle

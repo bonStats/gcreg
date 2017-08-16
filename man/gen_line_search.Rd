@@ -8,17 +8,16 @@ gen_line_search(oracle_fun, EPS = 1e-05, maxit = 200, ...)
 }
 \arguments{
 \item{oracle_fun}{oracle function to determine membership to constrained space.}
+
+\item{EPS}{precision of line search algorithm}
+
+\item{maxit}{maximum number of iterations}
+
+\item{...}{extra arguments. Currently ignored.}
 }
 \value{
 Function to conduct line search with specified parameters.
 }
 \description{
 Search for boundary of permissible region between current value and desired value.
-}
-\examples{
-mono_ls <- gen_line_search(oracle_fun = is_monotone)
-mono_ls(cur = 0:5, aim = c(0,1,2,3,4,-5),index = 6)
-
-mono_ls <- gen_line_search(oracle_fun = is_monotone, region = c(0,1))
-mono_ls(cur = 0:5, aim = c(0,1,2,3,4,-5),index = 6)
 }

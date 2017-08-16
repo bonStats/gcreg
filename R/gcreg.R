@@ -4,4 +4,5 @@
 #' @docType package
 #' @name gcreg
 #' @import polynom
+#' @importFrom stats is.empty.model model.matrix model.response predict var deriv
 NULL

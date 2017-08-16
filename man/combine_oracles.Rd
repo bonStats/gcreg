@@ -16,6 +16,6 @@ function that returns TRUE if point satisfies oracle
 WIP: Combine oracle functions to be used in contrained estimation procedure
 }
 \examples{
-To do
+#To do
 
 }

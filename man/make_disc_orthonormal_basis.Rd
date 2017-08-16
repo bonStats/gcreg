@@ -19,7 +19,7 @@ polylist polynomials from polynom package defining orthonormal basis
 Create discrete (data-based) orthonormal polynom::polynomial basis
 }
 \examples{
-To do
-t(X) \%*\% X = diag()
-crossprod(X) == diag()
+#To do
+#t(X) \%*\% X = diag()
+#crossprod(X) == diag()
 }

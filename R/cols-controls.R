@@ -8,7 +8,7 @@
 #' @return a list of control parameters.
 #' @export
 #' @examples
-#' TO DO
+#' #TO DO
 
 
 cols_control <- function(method = "simple", maxit = 200, tol = 1e-05, step_start = 0.7, step_increment = 0.05){
