@@ -26,5 +26,5 @@ contrained minimum solution.
 The COLS algorithm.
 }
 \examples{
-#TO DO
+#Provided for advanced users. Using cpm() is recommended.
 }

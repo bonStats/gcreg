@@ -5,14 +5,14 @@
 \title{WIP: Determine the least squares estimates of a constrained polynomial regression}
 \usage{
 cpm(formula, data, subset, weights, na.action, degree, constraint = NULL,
-  oracle = NULL, ...)
+  oracle = NULL, start, ...)
 }
 \arguments{
 \item{formula}{an object of class "formula" (or one that can be coerced to that class): a symbolic description of the model to be fitted.}
 
 \item{data}{an optional data frame, list or environment (or object coercible by as.data.frame to a data frame) containing the variables in the model. If not found in data, the variables are taken from environment(formula), typically the environment from which the function is called.}
 
-\item{subset}{an optional vector specifying a subset of observations to be used in the fitting process.}
+\item{subset}{NOT IMPLEMENTED an optional vector specifying a subset of observations to be used in the fitting process.}
 
 \item{weights}{NOT IMPLEMENTED}
 
@@ -23,6 +23,8 @@ cpm(formula, data, subset, weights, na.action, degree, constraint = NULL,
 \item{constraint}{an optional character string of "monotone" or "convex"}
 
 \item{oracle}{an optional function of class "oracle", returning TRUE when a given point is inside the constrained set and FALSE otherwise.}
+
+\item{start}{intial value of COLS optimisation}
 
 \item{...}{arguments to be passed to control_cols()}
 }
