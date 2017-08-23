@@ -4,7 +4,7 @@
 \alias{cols_control}
 \title{Create controls attributes which tune the COLS algorithm.}
 \usage{
-cols_control(method = "simple", maxit = 200, tol = 1e-05,
+cols_control(method = "best-step", maxit = 200, tol = 1e-05,
   step_start = 0.7, step_increment = 0.05)
 }
 \arguments{
