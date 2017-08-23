@@ -11,7 +11,7 @@
 #' #TO DO
 
 # basic implementation
-optim_COLS <- function(par, Y, X, oracle_fun, control = cols_control(...), ...) {
+optim_cols <- function(par, Y, X, oracle_fun, control = cols_control(...), ...) {
   # all in orthonormal basis
   # oracle function should have converter within
   # orcale function is set up by a helper function which tries different points? Or needs to be specified.
@@ -37,7 +37,7 @@ optim_COLS <- function(par, Y, X, oracle_fun, control = cols_control(...), ...) 
   # decide which method to use and set function
   if(control$method == "best-step"){
     
-    find_gamma <- function(cur, index) { # index not used
+    find_gamma <- function(cur, loop_i) { # loop_i currently not used
       
       pot_new_gammas <- lapply(1:p, FUN = ls_find, cur = cur, aim = aim_gamma)
       
@@ -45,32 +45,41 @@ optim_COLS <- function(par, Y, X, oracle_fun, control = cols_control(...), ...) 
       
       ix <- which.min(2 * as.vector(cur - aim_gamma) * pot_moves + pot_moves^2)
       
-      list(gamma = pot_new_gammas[[ix]], pot_moves = pot_moves)
+      list(gamma = pot_new_gammas[[ix]], coord = ix)
     
     }
       
+  } else if(control$method == "up-walk") {
+    
+    find_gamma <- function(cur, loop_i) {
+      
+      ix <- (loop_i %% p) + 1
+      
+      list(gamma = ls_find(index = ix, cur = cur, aim = aim_gamma), coord = ix)
+      
+    }
+
   } else {
-    # default is method = "simple"
-    find_gamma <- function(cur, index) {
+    # method = "down-walk"
+    find_gamma <- function(cur, loop_i) {
       
-      list(gamma = ls_find(index = index, cur = cur, aim = aim_gamma), pot_moves = NULL)
+      ix <- p - (loop_i %% p)
+      
+      list(gamma = ls_find(index = ix, cur = cur, aim = aim_gamma), coord = ix)
       
     }
-    
   }
   
   gamms <- list()
   
   # search
   while(i <= control$maxit & conv_counter < 2 * p){
-
-    ix <- (i %% p) + 1
     
     # finds the full move possible based on the function defined by find_gamma above
-    full_move <- find_gamma(cur = curr_gamma, index = ix)
+    full_move <- find_gamma(cur = curr_gamma, loop_i = i)
     
-    # reduces move to specified step size (works for change in one or several coordinates)
-    new_gamma <- replace(curr_gamma, ix, curr_gamma[ix] * (1 - step_size) + full_move$gamma[ix] * step_size)
+    # reduces move to specified step size (aside: would work for change in one or several coordinates with changes)
+    new_gamma <- replace(curr_gamma, full_move$coord, curr_gamma[full_move$coord] * (1 - step_size) + with(full_move, gamma[coord]) * step_size)
     gamms[[i+1]] <- new_gamma
     if(all(abs(new_gamma - curr_gamma) < control$tol)) {
       conv_counter <- conv_counter + 1

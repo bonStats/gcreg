@@ -11,10 +11,10 @@
 #' #TO DO
 
 
-cols_control <- function(method = "simple", maxit = 200, tol = 1e-05, step_start = 0.7, step_increment = 0.05){
+cols_control <- function(method = "best-step", maxit = 200, tol = 1e-05, step_start = 0.7, step_increment = 0.05){
   
   cntrl <- list(
-    method = match.arg(method, c("simple","best-step")), 
+    method = match.arg(method, c("up-walk","down-walk","best-step")), 
     maxit = ifelse(maxit > 0, maxit, 200), 
     tol = ifelse(tol > 0, tol, 1e-05), 
     step_start = ifelse(step_start > 0 & step_start <= 1, step_start, 0.7), 
