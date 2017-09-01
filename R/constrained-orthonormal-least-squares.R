@@ -119,7 +119,7 @@ optim_cols <- function(par, Y, X, oracle_fun, control = cols_control(...), ...) 
   while(i <= control$maxit & conv_counter < 2 * p){
     
     # finds the full move possible based on the function defined by find_gamma above
-    full_move <- find_gamma(cur = curr_gamma, loop_i = i)
+    full_move <- find_gamma(cur = curr_gamma, aim = aim_gamma, loop_i = i)
     
     # reduces move to specified step size (aside: would work for change in one or several coordinates with changes)
     new_gamma <- replace(curr_gamma, full_move$coord, curr_gamma[full_move$coord] * (1 - step_size) + with(full_move, gamma[coord]) * step_size)
