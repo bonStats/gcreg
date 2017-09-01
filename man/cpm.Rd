@@ -5,7 +5,7 @@
 \title{WIP: Determine the least squares estimates of a constrained polynomial regression}
 \usage{
 cpm(formula, data, subset, weights, na.action, degree, constraint = NULL,
-  oracle = NULL, start, ...)
+  oracle = NULL, start, c_region = c(-Inf, Inf), ...)
 }
 \arguments{
 \item{formula}{an object of class "formula" (or one that can be coerced to that class): a symbolic description of the model to be fitted.}
@@ -24,7 +24,9 @@ cpm(formula, data, subset, weights, na.action, degree, constraint = NULL,
 
 \item{oracle}{an optional function of class "oracle", returning TRUE when a given point is inside the constrained set and FALSE otherwise.}
 
-\item{start}{intial value of COLS optimisation}
+\item{start}{intial value of COLS optimisation.}
+
+\item{c_region}{the applicable region for the constraint, default is (-Inf,Inf), the real line.}
 
 \item{...}{arguments to be passed to control_cols()}
 }

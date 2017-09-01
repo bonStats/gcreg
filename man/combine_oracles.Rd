@@ -2,18 +2,24 @@
 % Please edit documentation in R/make-oracle.R
 \name{combine_oracles}
 \alias{combine_oracles}
-\title{WIP: Combine oracle functions to be used in contrained estimation procedure}
+\title{WIP: Methods for manipulating oracle functions}
 \usage{
 combine_oracles(...)
 }
 \arguments{
-\item{...}{oracle functions to be combined}
+\item{...}{oracle function(s)}
+
+\item{f_oracle}{oracle function}
+
+\item{x}{data}
+
+\item{f_scale}{scaling function}
 }
 \value{
 function that returns TRUE if point satisfies oracle
 }
 \description{
-WIP: Combine oracle functions to be used in contrained estimation procedure
+scale_oracle(): Specify one of data or scaling function
 }
 \examples{
 #To do

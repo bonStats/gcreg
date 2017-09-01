@@ -4,14 +4,12 @@
 \alias{is_monotone}
 \title{Check if polynomial is monotone over desired region.}
 \usage{
-is_monotone(p, region = c(-Inf, Inf), type = NULL, EPS = 1e-05)
+is_monotone(p, region = c(-Inf, Inf), EPS = 1e-05)
 }
 \arguments{
 \item{p}{polynomial}
 
 \item{region}{numeric is polynomial monotone over this region.}
-
-\item{type}{character one of "increasing", "decreasing" or NULL}
 
 \item{EPS}{numerical precision}
 }
