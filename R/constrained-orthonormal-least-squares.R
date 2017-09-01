@@ -38,38 +38,80 @@ optim_cols <- function(par, Y, X, oracle_fun, control = cols_control(...), ...) 
   # decide which method to use and set function
   if(control$method == "best-step"){
     
-    find_gamma <- function(cur, loop_i) { # loop_i currently not used
+    find_gamma <- function(cur, aim, loop_i) { # loop_i currently not used
       
-      pot_new_gammas <- lapply(1:p, FUN = ls_find, cur = cur, aim = aim_gamma)
+      pot_new_gammas <- lapply(1:p, FUN = ls_find, cur = cur, aim = aim)
       
       pot_moves <- diag(sapply(pot_new_gammas, function(g) {g - cur}))
       
-      ix <- which.min(2 * as.vector(cur - aim_gamma) * pot_moves + pot_moves^2)
+      ix <- which.min(2 * as.vector(cur - aim) * pot_moves + pot_moves^2)
       
       list(gamma = pot_new_gammas[[ix]], coord = ix)
-    
-    }
       
+    }
+    
+  } else if(control$method == "avoid-boundary"){
+    
+    find_gamma <- function(cur, aim, loop_i) { # loop_i currently not used
+      
+      pot_new_gammas <- lapply(1:p, FUN = ls_find, cur = cur, aim = aim)
+      
+      pot_moves <- diag(sapply(pot_new_gammas, function(g) {g - cur}))
+      
+      ix <- which.max(abs(pot_moves/(aim-cur)))
+      
+      list(gamma = pot_new_gammas[[ix]], coord = ix)
+      
+    }
+    
+  } else if(control$method == "once-best-step"){
+    
+    find_gamma <- function(cur, aim, loop_i) { # loop_i currently not used
+      
+      if ((loop_i %% (p+1)) == 0){
+        
+        pot_new_gammas <- lapply(1:p, FUN = ls_find, cur = cur, aim = aim)
+        
+        pot_moves <- diag(sapply(pot_new_gammas, function(g) {g - cur}))
+        
+        ix <- which.min(2 * as.vector(cur - aim) * pot_moves + pot_moves^2)
+        
+        cat("best ix=",ix,"\n")
+        
+        return(list(gamma = pot_new_gammas[[ix]], coord = ix))
+        
+      } else {
+        
+        ix <- (loop_i %% p) + 1
+        
+        cat("gen ix=",ix,"\n")
+        
+        return(list(gamma = ls_find(index = ix, cur = cur, aim = aim), coord = ix))
+        
+      }
+    }
+    
   } else if(control$method == "up-walk") {
     
-    find_gamma <- function(cur, loop_i) {
+    find_gamma <- function(cur, aim, loop_i) {
       
       ix <- (loop_i %% p) + 1
       
-      list(gamma = ls_find(index = ix, cur = cur, aim = aim_gamma), coord = ix)
+      list(gamma = ls_find(index = ix, cur = cur, aim = aim), coord = ix)
       
     }
-
+    
   } else {
     # method = "down-walk"
-    find_gamma <- function(cur, loop_i) {
+    find_gamma <- function(cur, aim, loop_i) {
       
       ix <- p - (loop_i %% p)
       
-      list(gamma = ls_find(index = ix, cur = cur, aim = aim_gamma), coord = ix)
+      list(gamma = ls_find(index = ix, cur = cur, aim = aim), coord = ix)
       
     }
   }
+  
   
   gamms <- list()
   
