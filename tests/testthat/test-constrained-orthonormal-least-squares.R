@@ -19,7 +19,11 @@ test_that("optim_cols() converges to same solution as lm() on unconstrained prob
       
       t_mean <-  Xo%*%b
       
-      Y <- t_mean + rnorm(n,sd = diff(range(t_mean))/3.5)
+      y <- t_mean + rnorm(n,sd = diff(range(t_mean))/4)
+      
+      cv_y <- gen_scale_data_funs(y)
+      
+      Y <- cv_y$scale(y)
       
       sim_dat <- data.frame(Y,Xo)
       
@@ -41,11 +45,11 @@ test_that("optim_cols() converges to same solution as lm() on unconstrained prob
 })
 
 
-test_that("optim_cols() converges to same solution as monpol() on general constrained monotonic  problem",{
+test_that("gcreg::optim_cols() vs MonoPoly::monpol() on general constrained monotonic  problem",{
   
   library(MonoPoly)
   
-  n_test <-c(20,400,8000)
+  n_test <-c(200,400,8000)
   poly_test <- list(
     c(0.5, 0.25, 0, - 0.5, 0, 0.4),
     c(-2, 1, 0.475, -3.167, -0.872, 6.255, 0.506, -3.182)
@@ -71,7 +75,11 @@ test_that("optim_cols() converges to same solution as monpol() on general constr
       
       t_mean <-  Xo%*%b_o 
       
-      Y <- t_mean + rnorm(n,sd = diff(range(t_mean))/3.5)
+      y <- t_mean + rnorm(n,sd = diff(range(t_mean))/10)
+      
+      cv_y <- gen_scale_data_funs(y)
+      
+      Y <- cv_y$scale(y)
       
       monpol_coef <- cv$to_ortho(
         coef(
@@ -79,19 +87,22 @@ test_that("optim_cols() converges to same solution as monpol() on general constr
         )
       )
       
-      cols_coef <- optim_cols(par = cv$to_ortho(rep(c(0.1,1),times = length(b)/2)), Y = Y, X = Xo, 
-                              function(p) is_monotone(p, region = clim),
-                              control = cols_control(tol = 1e-6, method = "best-step")
-      )[,1] 
+
+      cols_coef <- optim_cols(par = cv$to_ortho(rep(c(0.1,1),times = length(b)/2)), Y = Y, X = Xo,
+                              function(p) is_monotone(p = cv$to_mono(p), region = clim),
+                              control = cols_control(tol = 1e-6, method = "best-step",step_start = 0.7,step_increment = 0.05)
+      )[,1]
       
       cols_RSS_better <- sum((Y - Xo%*%cols_coef)^2) < sum((Y - Xo%*%monpol_coef)^2)
       
-      RSS_close <- sum((Y - Xo%*%cols_coef)^2) / sum((Y - Xo%*%monpol_coef)^2) - 1 < 1e-02
+      RSS_close <- abs(sum((Y - Xo%*%cols_coef)^2) / sum((Y - Xo%*%monpol_coef)^2) - 1) < 1e-02
       
       cols_monpol_equal <- all.equal(cols_coef, monpol_coef, tolerance = 1e-02)
       
       expect(cols_RSS_better | RSS_close | is.logical(cols_monpol_equal), message = paste("monpol out performed cols by more than 1% and different coefficients were found, with p =", length(b), "and n =", n))
-      
+    
+      expect_true(is_monotone(cv$to_mono(cols_coef), region = clim))  
+    
     }
     
   }
@@ -128,8 +139,11 @@ test_that("optim_cols() converges to same solution as monpol() on gap constraine
       
       t_mean <-  Xo%*%b_o 
       
-      Y <- t_mean + rnorm(n,sd = diff(range(t_mean))/3.5)
+      y <- t_mean + rnorm(n,sd = diff(range(t_mean))/10)
       
+      cv_y <- gen_scale_data_funs(y)
+      
+      Y <- cv_y$scale(y)
       
       monpol_coef <- cv$to_ortho(
         coef(
@@ -144,7 +158,7 @@ test_that("optim_cols() converges to same solution as monpol() on gap constraine
       
       cols_RSS_better <- sum((Y - Xo%*%cols_coef)^2) < sum((Y - Xo%*%monpol_coef)^2)
       
-      RSS_close <- sum((Y - Xo%*%cols_coef)^2) / sum((Y - Xo%*%monpol_coef)^2) - 1 < 1e-02
+      RSS_close <- abs(sum((Y - Xo%*%cols_coef)^2) / sum((Y - Xo%*%monpol_coef)^2) - 1) < 1e-02
       
       cols_monpol_equal <- all.equal(cols_coef, monpol_coef, tolerance = 1e-02)
       
@@ -187,7 +201,11 @@ test_that("optim_cols() converges to same solution as monpol() on gap + outlier 
       
       t_mean <-  Xo%*%b_o 
       
-      Y <- t_mean + rnorm(n,sd = diff(range(t_mean))/3.5)
+      y <- t_mean + rnorm(n,sd = diff(range(t_mean))/10)
+      
+      cv_y <- gen_scale_data_funs(y)
+      
+      Y <- cv_y$scale(y)
       
       outliers_x <- c(0.5,0.7)
       outliers_Xo <- sapply(p_basis, predict, newdata = outliers_x) 
