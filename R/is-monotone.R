@@ -2,7 +2,6 @@
 #' 
 #' @param p polynomial
 #' @param region numeric is polynomial monotone over this region.
-#' @param type character one of "increasing", "decreasing" or NULL
 #' @param EPS numerical precision
 #' @return TRUE if polynomial is monotone within region, FALSE otherwise.
 #' @export
@@ -10,7 +9,7 @@
 #' pol <- polynomial(c(1,4,5,2))
 #' is_monotone(pol, region = c(1,5))
 
-is_monotone <- function(p, region = c(-Inf,Inf), type = NULL, EPS = 1e-05){
+is_monotone <- function(p, region = c(-Inf,Inf), EPS = 1e-05){
   
   # Checks
   pl <- polynom::as.polynomial(p)
@@ -20,12 +19,6 @@ is_monotone <- function(p, region = c(-Inf,Inf), type = NULL, EPS = 1e-05){
   }
   if(EPS <= 0) {
     stop("Argument in wrong format. EPS should be a small positive number.")
-  }
-  if(is.null(type)){
-    usetype <- F
-  } else {
-    usetype <- T
-    type <- match.arg(type, choices = c("increasing","decreasing"))
   }
 
   a <- min(region)
