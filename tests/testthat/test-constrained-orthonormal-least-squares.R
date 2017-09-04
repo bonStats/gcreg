@@ -1,5 +1,5 @@
 context("testing functions in R/constrained-orthonormal-least-squares.R script")
-
+verbose <- F
 test_that("optim_cols() converges to same solution as lm() on unconstrained problem",{
   
   n_test <-c(20,400,8000)
@@ -35,7 +35,6 @@ test_that("optim_cols() converges to same solution as lm() on unconstrained prob
       )[,1]
       
       expect_equal(cols_coef, lm_coef, tolerance = 1e-05, info = paste("Different coefficients from lm and optim_cols, with p =", p, "and n =", n))
-      
       
     }
     
@@ -95,7 +94,7 @@ test_that("gcreg::optim_cols() vs MonoPoly::monpol() on general constrained mono
       
       cols_RSS_better <- sum((Y - Xo%*%cols_coef)^2) < sum((Y - Xo%*%monpol_coef)^2)
       
-      RSS_close <- abs(sum((Y - Xo%*%cols_coef)^2) / sum((Y - Xo%*%monpol_coef)^2) - 1) < 1e-02
+      RSS_close <- abs(sum((Y - Xo%*%cols_coef)^2) / sum((Y - Xo%*%monpol_coef)^2) - 1) < 1e-02 #1%
       
       cols_monpol_equal <- all.equal(cols_coef, monpol_coef, tolerance = 1e-02)
       
@@ -103,6 +102,8 @@ test_that("gcreg::optim_cols() vs MonoPoly::monpol() on general constrained mono
     
       expect_true(is_monotone(cv$to_mono(cols_coef), region = clim))  
     
+      if(verbose) cat("COLS RSS better =",cols_RSS_better,"/ RSS within 1% =", RSS_close, "/ Coefficients equal =",cols_monpol_equal,"\n")
+      
     }
     
   }
@@ -126,8 +127,9 @@ test_that("optim_cols() converges to same solution as monpol() on gap constraine
       compact_lims <- c(runif(1, min = -1, max = -0.2), runif(1, min = 0.2, max = 1))
       
       clim <- sample(list(c(-Inf,Inf),compact_lims),size = 1)[[1]]
+      #clim <- compact_lims
       
-      x <- c(runif(floor(n/2), min = -1, max = 0.3),runif(ceiling(n/2), min = 0.7, max = 1))
+      x <- c(runif(floor(n/2), min = -1, max = 0.4),runif(ceiling(n/2), min = 0.6, max = 1))
       
       p_basis <- make_disc_orthonormal_basis(x = x, deg = length(b) - 1)
       
@@ -151,18 +153,36 @@ test_that("optim_cols() converges to same solution as monpol() on gap constraine
         )
       )
       
-      cols_coef <- optim_cols(par = cv$to_ortho(rep(c(0.1,1),times = length(b)/2)), Y = Y, X = Xo, 
-                              function(p) is_monotone(p, region = clim),
-                              control = cols_control(tol = 1e-6, method = "best-step")
+      cols_coefs <- list()
+      
+      cols_coefs[[1]] <- optim_cols(par = cv$to_ortho(rep(c(0.1,1),times = length(b)/2)), Y = Y, X = Xo, 
+                              function(p) is_monotone(cv$to_mono(p), region = clim),
+                              control = cols_control(tol = 1e-6, method = "best",step_start = 0.9, step_increment = 0.01)
       )[,1] 
+      
+      
+      cols_coefs[[2]] <- optim_cols(par = cv$to_ortho(rep(c(0.1,1),times = length(b)/2)), Y = Y, X = Xo, 
+                               function(p) is_monotone(cv$to_mono(p), region = clim),
+                               control = cols_control(tol = 1e-6, method = "best",step_start = 0.5, step_increment = 0.05)
+      )[,1] 
+      
+      cols_RSS <- sapply(cols_coefs, function(p) sum((Y - Xo%*%p)^2))
+      
+      cols_coef <- cols_coefs[[which.min(cols_RSS)]]
       
       cols_RSS_better <- sum((Y - Xo%*%cols_coef)^2) < sum((Y - Xo%*%monpol_coef)^2)
       
-      RSS_close <- abs(sum((Y - Xo%*%cols_coef)^2) / sum((Y - Xo%*%monpol_coef)^2) - 1) < 1e-02
+      RSS_close <- abs(sum((Y - Xo%*%cols_coef)^2) / sum((Y - Xo%*%monpol_coef)^2) - 1) < 3e-02 #3%
       
       cols_monpol_equal <- all.equal(cols_coef, monpol_coef, tolerance = 1e-02)
       
       expect(cols_RSS_better | RSS_close | is.logical(cols_monpol_equal), message = paste("monpol out performed cols by more than 1% and different coefficients were found, with p =", length(b), "and n =", n))
+      
+      expect_true(is_monotone(cv$to_mono(cols_coef), region = clim))  
+      
+      if(verbose) cat("COLS RSS better =",cols_RSS_better,"/ RSS within 1% =", RSS_close, "/ Coefficients equal =",cols_monpol_equal,"\n")
+      
+      #sapply(p_basis, is_monotone, region = clim)
       
     }
     
@@ -175,7 +195,7 @@ test_that("optim_cols() converges to same solution as monpol() on gap + outlier 
   
   library(MonoPoly)
   
-  n_test <-c(20,400,8000)
+  n_test <-c(50,400,8000)
   poly_test <- list(
     c(0.5, 0.25, 0, - 0.5, 0, 0.4),
     c(-2, 1, 0.475, -3.167, -0.872, 6.255, 0.506, -3.182)
@@ -222,18 +242,38 @@ test_that("optim_cols() converges to same solution as monpol() on gap + outlier 
         )
       )
       
-      cols_coef <- optim_cols(par = cv$to_ortho(rep(c(0.1,1),times = length(b)/2)), Y = Y, X = Xo, 
-                              function(p) is_monotone(p, region = clim),
-                              control = cols_control(tol = 1e-6, method = "best-step")
+      cols_coefs <- list()
+      
+      lm_above_average_slope <- coef(lm(Y~x)) * c(1,2) + c(1.5,0)
+      
+      cols_coefs[[1]] <- optim_cols(par = cv$to_ortho(c(lm_above_average_slope, rep(c(0.1,1),times = length(b)/2 - 1))), Y = Y, X = Xo, 
+                                    function(p) is_monotone(cv$to_mono(p), region = clim),
+                                    control = cols_control(tol = 1e-6, method = "best",step_start = 0.9, step_increment = 0.01)
       )[,1] 
+      
+      
+      cols_coefs[[2]] <- optim_cols(par = cv$to_ortho(rep(c(0.1,1),times = length(b)/2)*lm_above_average_slope), Y = Y, X = Xo, 
+                                    function(p) is_monotone(cv$to_mono(p), region = clim),
+                                    control = cols_control(tol = 1e-6, method = "best",step_start = 0.3, step_increment = 0.05)
+      )[,1] 
+      
+      cols_RSS <- sapply(cols_coefs, function(p) sum((Y - Xo%*%p)^2))
+      
+      cols_coef <- cols_coefs[[which.min(cols_RSS)]]
       
       cols_RSS_better <- sum((Y - Xo%*%cols_coef)^2) < sum((Y - Xo%*%monpol_coef)^2)
       
-      RSS_close <- abs(sum((Y - Xo%*%cols_coef)^2) / sum((Y - Xo%*%monpol_coef)^2) - 1) < 1e-02
+      RSS_close <- abs(sum((Y - Xo%*%cols_coef)^2) / sum((Y - Xo%*%monpol_coef)^2) - 1) < 3e-02 #3%
       
       cols_monpol_equal <- all.equal(cols_coef, monpol_coef, tolerance = 1e-02)
       
-      expect(cols_RSS_better | RSS_close | is.logical(cols_monpol_equal), message = paste("monpol out performed cols by more than 1% and different coefficients were found, with p =", length(b), "and n =", n))
+      expect(cols_RSS_better | RSS_close | is.logical(cols_monpol_equal), message = paste("monpol out performed cols by more than 3% and different coefficients were found, with p =", length(b), "and n =", n))
+      
+      expect_true(is_monotone(cv$to_mono(cols_coef), region = clim))  
+      
+      if(verbose) cat("COLS RSS better =",cols_RSS_better,"/ RSS within 1% =", RSS_close, "/ Coefficients equal =",cols_monpol_equal,"\n")
+      
+      sapply(p_basis, is_monotone, region = clim)
       
     }
     
