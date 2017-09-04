@@ -13,7 +13,7 @@
 
 make_disc_orthonormal_basis <- function(x, deg){
   
-  if(max(abs(x)) > 1) warning("x values outside of [-1,1] may lead to numerically unstable results, scale the data.")
+  if(max(abs(x)) > 1.00001) warning("x values outside of [-1,1] may lead to numerically unstable results, scale the data.")
   
   # data length
   len <- length(x)
