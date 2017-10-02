@@ -2,6 +2,7 @@
 #' 
 #' Scale x variables to be between -1 and 1 which improves stability of algorithms working with polynomials
 #' @param x vector of data.
+#' @keywords internal
 #' @export
 #' @examples
 #' x <- rnorm(100, mean = 3)

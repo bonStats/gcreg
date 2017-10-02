@@ -19,3 +19,4 @@ x_scaled <- sc$scale(x)
 all(abs(sc$unscale(x_scaled) - x) < 1e-10)
 
 }
+\keyword{internal}

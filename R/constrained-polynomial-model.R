@@ -1,9 +1,13 @@
-#' WIP: Determine the least squares estimates of a constrained polynomial regression
+#' Determine the least squares estimates of a constrained polynomial regression
+#' 
+#' Estimates univariate polynomials with parameters from a closed convex set. 
+#' Some examples are shape constraints (e.g. montonicity, convexity) or simply linear parameter constraints
+#' such as \eqn{\beta_{1} >= 0}{\beta [1] >= 0}.
 #' 
 #' @param formula an object of class "formula" (or one that can be coerced to that class): a symbolic description of the model to be fitted.
 #' @param data an optional data frame, list or environment (or object coercible by as.data.frame to a data frame) containing the variables in the model. If not found in data, the variables are taken from environment(formula), typically the environment from which the function is called.
-#' @param subset NOT IMPLEMENTED an optional vector specifying a subset of observations to be used in the fitting process.
-#' @param weights NOT IMPLEMENTED
+#' @param subset NOT YET IMPLEMENTED an optional vector specifying a subset of observations to be used in the fitting process.
+#' @param weights NOT YET IMPLEMENTED
 #' @param na.action a function which indicates what should happen when the data contain NAs. The default is set by the na.action setting of options, and is na.fail if that is unset. The 'factory-fresh' default is na.omit. Another possible value is NULL, no action. Value na.exclude can be useful.
 #' @param degree degree of polynomial to be fit
 #' @param constraint an optional character string of "monotone" or "convex"
@@ -11,6 +15,7 @@
 #' @param start intial value of COLS optimisation.
 #' @param c_region the applicable region for the constraint, default is (-Inf,Inf), the real line.
 #' @param ... arguments to be passed to control_cols()
+#' @return Constrained regression model with class \code{creg}
 #' @export
 
 cpm <- function(formula, data, subset, weights, na.action,
@@ -108,8 +113,10 @@ cpm <- function(formula, data, subset, weights, na.action,
   
   if(length(init_par) != degree + 1) stop("length of start/init_par is incorrect for specified degree")
   
+  ctrl_list <- cols_control(method = "best-step", ...)
+  
   # need to scale init param also
-  z <- optim_cols(par = cv$to_ortho(init_par), Y = y_sc, X = Xo, oracle_fun = sc_oracle, control = cols_control(method = "best-step", ...))
+  z <- optim_cols(par = cv$to_ortho(init_par), Y = y_sc, X = Xo, oracle_fun = sc_oracle, control = ctrl_list)
   
   # un-orthonormalise (discrete polynomial orthogonalisation)
   sc_xy_beta_par <- as.numeric(cv$to_mono(z))
@@ -126,28 +133,27 @@ cpm <- function(formula, data, subset, weights, na.action,
   
   names(beta_par) <- c("Intercept", paste0("x^",1:degree))
   
-  y_predict <- predict(beta_pl, newdata = x)
+  z <- list(beta = beta_par)
   
-  RSS <- sum((y - y_predict)^2)
+  z$fitted.values <- predict(beta_pl, newdata = x)
+  attributes(z$fitted.values) <- attributes(y)
   
+  z$residuals <- y - z$fitted.values
   
+  z$RSS <- sum(z$residuals^2)
   
-  return(
-    list(beta = beta_par, RSS = RSS, 
-         scaled = list(beta = sc_xy_beta_par, oracle = sc_oracle, x = x_sc, y = y_sc)
-              )
-    )
+  z$controls <- ctrl_list
   
-  # z$na.action <- attr(mf, "na.action")
-  # z$call <- cl
-  # z$terms <- mt
-  # if (model) 
+  z$na.action <- attr(mf, "na.action")
+  z$call <- cl
+  z$terms <- mt
+  # if (model)
   #   z$model <- mf
-  # if (ret.x) 
+  # if (ret.x)
   #   z$x <- x
-  # if (ret.y) 
+  # if (ret.y)
   #   z$y <- y
-  # structure(z, class = "polreg")
+  structure(z, class = "creg")
   
   
 }

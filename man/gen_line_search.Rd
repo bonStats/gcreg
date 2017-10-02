@@ -21,3 +21,4 @@ Function to conduct line search with specified parameters.
 \description{
 Search for boundary of permissible region between current value and desired value.
 }
+\keyword{internal}

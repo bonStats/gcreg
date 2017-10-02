@@ -4,6 +4,7 @@
 #' @param EPS precision of line search algorithm
 #' @param maxit maximum number of iterations
 #' @param ... extra arguments. Currently ignored.
+#' @keywords internal
 #' @return Function to conduct line search with specified parameters.
 
 

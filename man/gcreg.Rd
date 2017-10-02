@@ -4,7 +4,7 @@
 \name{gcreg}
 \alias{gcreg}
 \alias{gcreg-package}
-\title{gcreg: A package for fitting constrained fixed effect polynomial regression models}
+\title{gcreg: A package for fitting constrained regression models}
 \description{
-gcreg: A package for fitting constrained fixed effect polynomial regression models
+Currently under development. Function cpm() fits constrained polynomial models
 }

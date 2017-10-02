@@ -28,3 +28,4 @@ The COLS algorithm.
 \examples{
 #Provided for advanced users. Using cpm() is recommended.
 }
+\keyword{internal}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/constrained-polynomial-model.R
 \name{cpm}
 \alias{cpm}
-\title{WIP: Determine the least squares estimates of a constrained polynomial regression}
+\title{Determine the least squares estimates of a constrained polynomial regression}
 \usage{
 cpm(formula, data, subset, weights, na.action, degree, constraint = NULL,
   oracle = NULL, start, c_region = c(-Inf, Inf), ...)
@@ -12,9 +12,9 @@ cpm(formula, data, subset, weights, na.action, degree, constraint = NULL,
 
 \item{data}{an optional data frame, list or environment (or object coercible by as.data.frame to a data frame) containing the variables in the model. If not found in data, the variables are taken from environment(formula), typically the environment from which the function is called.}
 
-\item{subset}{NOT IMPLEMENTED an optional vector specifying a subset of observations to be used in the fitting process.}
+\item{subset}{NOT YET IMPLEMENTED an optional vector specifying a subset of observations to be used in the fitting process.}
 
-\item{weights}{NOT IMPLEMENTED}
+\item{weights}{NOT YET IMPLEMENTED}
 
 \item{na.action}{a function which indicates what should happen when the data contain NAs. The default is set by the na.action setting of options, and is na.fail if that is unset. The 'factory-fresh' default is na.omit. Another possible value is NULL, no action. Value na.exclude can be useful.}
 
@@ -30,6 +30,11 @@ cpm(formula, data, subset, weights, na.action, degree, constraint = NULL,
 
 \item{...}{arguments to be passed to control_cols()}
 }
+\value{
+Constrained regression model with class \code{creg}
+}
 \description{
-WIP: Determine the least squares estimates of a constrained polynomial regression
+Estimates univariate polynomials with parameters from a closed convex set. 
+Some examples are shape constraints (e.g. montonicity, convexity) or simply linear parameter constraints
+such as \eqn{\beta_{1} >= 0}{\beta [1] >= 0}.
 }
