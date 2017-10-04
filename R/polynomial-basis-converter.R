@@ -1,6 +1,6 @@
-#' Generate functions to convert regression coefficients between orthonormal and standard (monomial) polynomial bases.
+#' Generate functions to convert regression coefficients between a given polynomial basis (e.g. discrete orthonormal) and standard (monomial) polynomial bases.
 #' 
-#' @param poly_basis polylist defining the orthonormal basis to be used in conversions
+#' @param poly_basis polylist defining the (non-monomial) basis to convert from.
 #' @return list of length 2 with functions having names 'to_mono' (conversion to monomial basis) and 'to_ortho' (conversion to orthonormal basis)
 #' @export
 
