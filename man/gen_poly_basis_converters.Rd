@@ -2,16 +2,16 @@
 % Please edit documentation in R/polynomial-basis-converter.R
 \name{gen_poly_basis_converters}
 \alias{gen_poly_basis_converters}
-\title{Generate functions to convert regression coefficients between orthonormal and standard (monomial) polynomial bases.}
+\title{Generate functions to convert regression coefficients between a given polynomial basis (e.g. discrete orthonormal) and standard (monomial) polynomial bases.}
 \usage{
 gen_poly_basis_converters(poly_basis)
 }
 \arguments{
-\item{poly_basis}{polylist defining the orthonormal basis to be used in conversions}
+\item{poly_basis}{polylist defining the (non-monomial) basis to convert from.}
 }
 \value{
 list of length 2 with functions having names 'to_mono' (conversion to monomial basis) and 'to_ortho' (conversion to orthonormal basis)
 }
 \description{
-Generate functions to convert regression coefficients between orthonormal and standard (monomial) polynomial bases.
+Generate functions to convert regression coefficients between a given polynomial basis (e.g. discrete orthonormal) and standard (monomial) polynomial bases.
 }

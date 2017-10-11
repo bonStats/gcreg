@@ -1,6 +1,7 @@
 #' Create design matrix from polynomial basis.
 #' 
 #' @param poly_basis polylist defining the (non-monomial) basis to convert from.
+#' @param x data for design matrix
 #' @return Design matrix for polynomial regression in \code{ploy_basis}
 #' @export
 

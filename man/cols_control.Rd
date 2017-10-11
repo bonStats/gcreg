@@ -5,7 +5,8 @@
 \title{Create controls attributes which tune the COLS algorithm.}
 \usage{
 cols_control(method = "best-step", maxit = 200, tol = 1e-05,
-  step_start = 0.7, step_increment = 0.05)
+  step_start = 0.7, step_increment = 0.05, maxit_bounces = 2,
+  maxit_bumps = 5, tol_bounce = tol)
 }
 \arguments{
 \item{method}{"simple" or "best-step".}
@@ -17,6 +18,12 @@ cols_control(method = "best-step", maxit = 200, tol = 1e-05,
 \item{step_start}{the initial step size taken.}
 
 \item{step_increment}{how step size increases over iterations.}
+
+\item{maxit_bounces}{Maximum number of bounces away from the solution.}
+
+\item{maxit_bumps}{Maximum number of bumps to test for each solution.}
+
+\item{tol_bounce}{tolerance level bounce iterations.}
 }
 \value{
 a list of control parameters.

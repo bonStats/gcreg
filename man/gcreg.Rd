@@ -6,5 +6,5 @@
 \alias{gcreg-package}
 \title{gcreg: A package for fitting constrained regression models}
 \description{
-Currently under development. Function cpm() fits constrained polynomial models
+Currently under development. Function cpm() fits constrained polynomial models.
 }
