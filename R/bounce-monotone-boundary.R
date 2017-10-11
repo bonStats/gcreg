@@ -37,14 +37,15 @@ bounce_monotone <- function(gam, Y, Xo, poly_basis, oracle_fun, region, basis_cv
     bump_dir <- sapply(Dpoly_basis, predict, newdata = loc)
     bump_norm <- bump_dir / sqrt(sum(bump_dir^2))
     max_bump <- bump_norm
-    new_start <- z + bump
+    new_start <- z + max_bump
     
     while(!oracle_fun(new_start)){
       max_bump <- max_bump / 2
       new_start <- z + max_bump
       new_start_neg <- z - max_bump
-      if(oracle_fun(new_start_neg)){
+      if(oracle_fun(new_start_neg) & !oracle_fun(new_start)){
         new_start <- new_start_neg
+        max_bump <- - max_bump
       }
     }
     
@@ -54,11 +55,11 @@ bounce_monotone <- function(gam, Y, Xo, poly_basis, oracle_fun, region, basis_cv
       
       temp_z <- optim_cols(par = new_start, Y = Y, X = Xo, oracle_fun = oracle_fun, control = control)
       
-      rss_temp <- frss(temp_z)
+      temp_rss <- frss(temp_z)
       
-      if(rss_temp < old_rss) {
+      if(temp_rss < old_rss) {
         z <- temp_z
-        new_rss <- rss_temp
+        new_rss <- temp_rss
         break
       }
       
