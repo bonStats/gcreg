@@ -119,7 +119,7 @@ cpm <- function(formula, data, subset, weights, na.action,
   z <- optim_cols(par = cv$to_ortho(init_par), Y = y_sc, X = Xo, oracle_fun = sc_oracle, control = ctrl_list)
   
   #bounces to deal with flat spots if on boundary
-  if(control$maxit_bounces > 0){
+  if(ctrl_list$maxit_bounces > 0){
     boundary_distance <- linear_dist_to_monotone_boundary(gam = z, region = c_region, basis_cv = cv)$dist
     
     if(abs(boundary_distance) < 1e-04){
