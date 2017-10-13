@@ -1,26 +1,21 @@
 #' WIP: Methods for manipulating oracle functions
 #' 
-#' scale_oracle(): Specify one of data or scaling function
 #' 
-#' @param f_oracle oracle function
-#' @param x data
-#' @param f_scale scaling function 
-#' @param ... oracle function(s)
-#' @return function that returns TRUE if point satisfies oracle
+#' @param oracle oracle function, returns TRUE if point is in constrained region, FALSE otherwise.
+#' @param region region over which constraint is applied.
+#' @return function that returns TRUE if point satisfies oracle, FALSE otherwise.
 #' @export
 #' @examples
 #' #To do
 #'
 
-combine_oracles <- function(...) { # turn into combine.oracle? test if is oracle
-  # to do
-  oracles <- list(...)
+make_oracle <- function(oracle, region = c(-Inf,Inf)){
   
-  function(p, ...) {
-    
-    all(apply(oracles, p = p, ...))
-      
-    
-  }
+  if(!is.function(oracle)) stop("oracle must be a function")
+  
+  .oracle <- oracle
+  attr(.oracle, "region") <- region
+  
+  return(.region)
   
 }
