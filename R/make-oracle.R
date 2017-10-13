@@ -16,6 +16,6 @@ make_oracle <- function(oracle, region = c(-Inf,Inf)){
   .oracle <- oracle
   attr(.oracle, "region") <- region
   
-  return(.region)
+  return(.oracle)
   
 }

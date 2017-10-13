@@ -20,7 +20,7 @@ cpm(formula, data, subset, weights, na.action, degree, constraint = NULL,
 
 \item{degree}{degree of polynomial to be fit}
 
-\item{constraint}{an optional character string of "monotone" or "convex"}
+\item{constraint}{an optional character string of "monotone" ("convex" coming soon)}
 
 \item{oracle}{an optional function of class "oracle", returning TRUE when a given point is inside the constrained set and FALSE otherwise.}
 
