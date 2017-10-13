@@ -10,7 +10,7 @@
 #' @param weights NOT YET IMPLEMENTED
 #' @param na.action a function which indicates what should happen when the data contain NAs. The default is set by the na.action setting of options, and is na.fail if that is unset. The 'factory-fresh' default is na.omit. Another possible value is NULL, no action. Value na.exclude can be useful.
 #' @param degree degree of polynomial to be fit
-#' @param constraint an optional character string of "monotone" or "convex"
+#' @param constraint an optional character string of "monotone" ("convex" coming soon)
 #' @param oracle an optional function of class "oracle", returning TRUE when a given point is inside the constrained set and FALSE otherwise.
 #' @param start intial value of COLS optimisation.
 #' @param c_region the applicable region for the constraint, default is (-Inf,Inf), the real line.
@@ -91,6 +91,7 @@ cpm <- function(formula, data, subset, weights, na.action,
     init_par_in <- oracle(start)
     oracle_region <- attr(init_par_in, "region")
     init_par <- start
+    
     if(is.null(oracle_region)) {
       warning("No boundaries specified in attributes of return of oracle function, assuming constraining region is: (", paste(c_region,collapse = ","),")")
       oracle_region <- c_region
@@ -102,7 +103,7 @@ cpm <- function(formula, data, subset, weights, na.action,
       sc_oracle_region <- sc_fun_x$scale(c_region)
       sc_oracle <- function(p) {oracle(cv$to_mono(p), region = sc_oracle_region)}
     } else {
-      if(any(is.finite(c_region))) warning("Applicable region for oracle function not scaled for finite boundary. Please provide oracle function with argument 'region'")
+      if(any(is.finite(c_region))) warning("Applicable region for oracle function not scaled for finite boundary. Please provide oracle function with attribute 'region'")
       sc_oracle <- function(p) {oracle(cv$to_mono(p))}
     }
     
@@ -118,12 +119,14 @@ cpm <- function(formula, data, subset, weights, na.action,
   # need to scale init param also
   z <- optim_cols(par = cv$to_ortho(init_par), Y = y_sc, X = Xo, oracle_fun = sc_oracle, control = ctrl_list)
   
-  #bounces to deal with flat spots if on boundary
-  if(ctrl_list$maxit_bounces > 0){
-    boundary_distance <- linear_dist_to_monotone_boundary(gam = z, region = c_region, basis_cv = cv)$dist
-    
-    if(abs(boundary_distance) < 1e-04){
-      z <- bounce_monotone(gam = z, Y = y_sc, Xo = Xo, poly_basis = poly_basis, oracle_fun = sc_oracle, region = c_region, basis_cv = cv, control = ctrl_list)
+  #bounces to deal with flat spots if on monotone boundary (others to be implemented)
+  if(!missing(constraint)){
+    if(constraint == "monotone" & ctrl_list$maxit_bounces > 0){
+      boundary_distance <- linear_dist_to_monotone_boundary(gam = z, region = c_region, basis_cv = cv)$dist
+      
+      if(abs(boundary_distance) < 1e-04){
+        z <- bounce_monotone(gam = z, Y = y_sc, Xo = Xo, poly_basis = poly_basis, oracle_fun = sc_oracle, region = c_region, basis_cv = cv, control = ctrl_list)
+      }
     }
   }
   
