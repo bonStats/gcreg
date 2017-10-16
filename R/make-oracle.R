@@ -13,8 +13,12 @@ make_oracle <- function(oracle, region = c(-Inf,Inf)){
   
   if(!is.function(oracle)) stop("oracle must be a function")
   
-  .oracle <- oracle
-  attr(.oracle, "region") <- region
+  .oracle <- function(x){
+    .x <- matrix(as.numeric(x), ncol = 1)
+    res <- oracle(.x)
+    attr(res, "region") <- region
+    return(res)
+    }
   
   return(.oracle)
   
