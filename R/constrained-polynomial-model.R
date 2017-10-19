@@ -46,8 +46,10 @@ cpm <- function(formula, data, subset, weights, na.action,
     stop("'degree' should be specified") # to be updated
   if (trunc(degree) != degree || degree <= 0 || degree >= length(x)) 
     stop("'degree' should be a positive integer less than ", length(x),".")
-  if(degree %% 2 == 0 & any(is.infinite(c_region)))
-    stop("When 'degree' is even, c_region should be compact.")
+  if(degree %% 2 == 0 & any(is.infinite(c_region)) & !missing(constraint)){
+    if(constraint == "monotone") stop("When 'degree' is even, c_region should be compact.")
+  } # convex here when implemented
+    
   
   # scale_data
   sc_fun_x <- gen_scale_data_funs(x)
@@ -171,9 +173,9 @@ cpm <- function(formula, data, subset, weights, na.action,
     region_arg_exists <- !is.null(formals(oracle)$region)
     
     if(region_arg_exists & !missing(c_region)){
-      sc_oracle <- function(p) {oracle(untransform_gam(p), region = c_region)}
+      sc_oracle <- function(g) {oracle(untransform_gam(g), region = c_region)}
     } else {
-      sc_oracle <- function(p) {oracle(untransform_gam(p))}
+      sc_oracle <- function(g) {oracle(untransform_gam(g))}
     }
     
   }
@@ -198,7 +200,7 @@ cpm <- function(formula, data, subset, weights, na.action,
       }
     }
   }
- 
+  
   beta_par <- untransform_gam(gam = z)
   beta_pl <- attr(beta_par, "beta_pl")
   attributes(beta_par) <- NULL
