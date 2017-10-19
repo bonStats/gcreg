@@ -45,7 +45,9 @@ cpm <- function(formula, data, subset, weights, na.action,
   if (missing(degree)) 
     stop("'degree' should be specified") # to be updated
   if (trunc(degree) != degree || degree <= 0 || degree >= length(x)) 
-    stop("'degree' should be a positive integer less than length(x).")
+    stop("'degree' should be a positive integer less than ", length(x),".")
+  if(degree %% 2 == 0 & any(is.infinite(c_region)))
+    stop("When 'degree' is even, c_region should be compact.")
   
   # scale_data
   sc_fun_x <- gen_scale_data_funs(x)
