@@ -136,11 +136,7 @@ cpm <- function(formula, data, subset, weights, na.action,
       sc_oracle <- function(p) is_monotone(cv$to_mono(p), region = sc_oracle_region)
      if(missing(start)){
        # assumes monotone increasing
-<<<<<<< HEAD
        if((degree + 1) %% 2 == 0) {
-=======
-       if(degree+1 %% 2 == 0) {
->>>>>>> 67e6c9f18a84c3fa5c7fb37c5843ae77b0a860d4
          init_par <- cv$to_ortho(
            rep(c(0.1,1), times = (degree+1)/2)
          )
