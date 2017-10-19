@@ -1,0 +1,90 @@
+---
+title: "Getting started with gcreg"
+author: "Joshua Bon"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with gcreg}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{fda,ggplot2,dplyr}
+---
+
+gcreg fits constrained regression models. The package is currently still being developed and tested, but functionality for constrained polynomial regression models is available with the function cpm(). This vignette will demonstrate some examples of constrained polynomial regression.
+
+## Monotonic Regression
+
+Monotonicity is a constraint provided directly in cpm(). We will use some datasets from the fda package.
+
+The onechild in fda (Tuddenham and Snyder, 1954):
+```{r, fig.show='hold', fig.cap='fda::onechild data'}
+library(fda)
+library(ggplot2)
+
+g_oc <- ggplot(data = fda::onechild) + geom_point(aes(y = height, x = day), size = 0.5) + theme_bw()
+
+print(g_oc)
+
+```
+
+We can fit a constrained polynomial model and an unconstrained model for comparison:
+
+```{r }
+library(gcreg)
+library(dplyr)
+
+deg <- 11
+
+c_model <- cpm(height ~ day, data = fda::onechild, degree = deg, 
+               constraint = "monotone", c_region = range(fda::onechild$day))
+
+u_model <- lm(height ~ poly(day, degree = deg), data = fda::onechild)
+
+# RSS
+RSS <- list(
+  c_model = sum(residuals(c_model)^2),
+  u_model = sum(residuals(u_model)^2)
+)
+
+RSS
+```
+
+The fitted curves:
+
+```{r, fig.show='hold'}
+
+plot_dat <- with(fda::onechild, data.frame(day = seq(from = min(day), to = max(day), length.out = 201)))
+
+c_plot_dat <- plot_dat %>% mutate(model = "cm", height = predict(c_model, newdata = plot_dat$day)[,1])
+
+u_plot_dat <- plot_dat %>% mutate(model = "lm", height = predict(u_model, newdata = list(day=day)))
+
+plot_dat <- rbind(c_plot_dat, u_plot_dat)
+
+g_oc + geom_line(data = plot_dat, aes(y = height, x = day, colour = model))
+
+```
+
+## User-defined constraints
+
+Use the make_oracle() function to define your own constraints.
+
+```{r}
+
+# # Constraint: T if beta[2] >= 3, F otherwise
+# b3_g1 <- function(b){
+#   b[3,1] >= 1
+# }
+# 
+# # Initial value
+# start_beta <- runif(n = deg + 1)
+# start_beta[3] <- 10
+# 
+# orc_f <- make_oracle(oracle = b3_g1)
+# 
+# c_model <- cpm(height ~ day, data = fda::onechild, degree = deg, 
+#                oracle = orc_f, start = start_beta, step_start = 0.7)
+
+
+```
+

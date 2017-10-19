@@ -4,11 +4,20 @@ Title: General Constraint REGression
 Version: 0.1.0
 Author: Joshua Bon
 Maintainer: Joshua Bon <joshuajbon@gmail.com>
-Description: Fitting fixed effects polynomial models with general (closed & convex) constraints, such as monotonicity.
+Description: Fitting polynomial models with general (closed & convex) constraints, such as monotonicity.
 License: GPL-3 + file LICENSE
 LazyData: TRUE
 URL: http://github.com/bonStats/gcreg/
 BugReports: http://github.com/bonStats/gcreg/issues
-Depends: polynom
+Depends: polynom,
+    dplyr,
+    Matrix,
+    tmvtnorm,
 RoxygenNote: 6.0.1
-Suggests: testthat
+Suggests: testthat,
+    knitr,
+    rmarkdown,
+    ggplot2,
+    fda,
+    lme4
+VignetteBuilder: knitr

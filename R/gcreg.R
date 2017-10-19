@@ -5,5 +5,8 @@
 #' @docType package
 #' @name gcreg
 #' @import polynom
-#' @importFrom stats is.empty.model model.matrix model.weights model.response predict var deriv formula napredict naresid coef fitted
+#' @import Matrix
+#' @import dplyr
+#' @import tmvtnorm
+#' @importFrom stats is.empty.model model.matrix model.weights model.response predict var deriv formula napredict naresid coef fitted pnorm dnorm setNames optim
 NULL
