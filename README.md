@@ -1,6 +1,4 @@
-# gcreg
-
-General Constraint Regression models in `R`
+# gcreg: General Constraint Regression models in `R`
 
 This package is currently being developed. It's aim is to provide methods for fitting regression models with:
 * Functional and shape constraints, e.g. monotonicity
