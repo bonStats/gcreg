@@ -1,6 +1,7 @@
 #' Fit polynomial constrained mixed effect model with monotonic mean and (potentially) monotonic random effects.
 #' 
-#' EXPIREMENTAL: For use with block-random effects (non-crossed). See vignette for usage details.
+#' EXPIREMENTAL: For use with block-random effects (non-crossed), e.g. subject-specific random effects.
+#' This function is under development and may change without warning. See the mixed effects vignette for usage details.
 #' 
 #' @param model model specification made by make_em_model_specs().
 #' @param maxit maximum number of iterations.
@@ -13,6 +14,8 @@
 #' @return list including estimated mixed effects model.
 
 constrained_lmm_em <- function(model, maxit = 200, tol, start = NULL, verbose = F, save_steps = F, check_up = F){
+  
+  if(missing(model)) stop("model argument must be specified. Use gcreg:::make_em_model_specs().")
   
   # Algorithm constants, functions
   
@@ -248,9 +251,9 @@ constrained_lmm_em <- function(model, maxit = 200, tol, start = NULL, verbose = 
                           gr = calc_Dql_omega_wrapper,
                           em_list = .em,
                           method = "L-BFGS-B",
-                          lower = with(model$specs, c(rep(-10, times = r), rep(-10, times = (r - 1) * r / 2))),
-                          upper = with(model$specs, c(rep( 10, times = r), rep( 10, times = (r - 1) * r / 2)))
-                          # lower/upper bounds stop numerical difficulty with solve(L)
+                          lower = with(model$specs, c(rep(-10, times = r), rep(-20, times = (r - 1) * r / 2))),
+                          upper = with(model$specs, c(rep( 10, times = r), rep( 20, times = (r - 1) * r / 2)))
+                          # lower/upper bounds stop numerical difficulty with solve(L). Should generically decide on these based on problem size.
       )
 
     }
@@ -490,7 +493,7 @@ constrained_lmm_em <- function(model, maxit = 200, tol, start = NULL, verbose = 
   
   # Some choice for initial par in monomial basis
   if(is.null(start$beta)){
-    fe_fit <- cpm(formula = y ~ x, data = model$dat, degree = md$specs$p - 1, constraint = "monotone", c_region = model$mcontr_region)
+    fe_fit <- cpm(formula = y ~ x, data = model$dat, degree = model$specs$p - 1, constraint = "monotone", c_region = model$mcontr_region)
     beta_init <- coef(fe_fit)
   } else {
     beta_init <- start$beta
@@ -579,6 +582,7 @@ constrained_lmm_em <- function(model, maxit = 200, tol, start = NULL, verbose = 
     } else if(check_up & i > 1){
       
       ql_hood_check <- prev_em %>% E_step() %>% ql_hood()
+      #ql_hood_check <- ql_hood_vals[i]
       
       if(ql_hood_vals[i+1] > ql_hood_check){ # on divergence scale so should be decreasing
         
@@ -614,7 +618,24 @@ constrained_lmm_em <- function(model, maxit = 200, tol, start = NULL, verbose = 
     res <- new_em %>% E_step()
   }
   
-  return(list(res = res,
+  beta_mean <- mean_pl_cv$to_mono(res$gam)
+  
+  beta_grp <- lapply(seq(0, nrow(res$re_mean)-1, by = model$specs$r), FUN = 
+                       function(i){
+                         beta_mean + 
+                           c(grp_pl_cv$to_mono(res$re_mean[i + 1:model$specs$r,]), 
+                             rep(0, times = model$specs$p - model$specs$r)
+                             )
+                       }
+                       )
+  
+  names(beta_grp) <-  model$group_ids
+  
+  return(list(beta_mean = beta_mean,
+              beta_grp = beta_grp,
+              H_mat = tcrossprod(make_L_mat(res$omeg)),
+              sig = res$sig2,
+              res = res,
               em_list = em,
               ql_vals = ql_hood_vals,
               which_min = which_min,
@@ -624,7 +645,9 @@ constrained_lmm_em <- function(model, maxit = 200, tol, start = NULL, verbose = 
                 ql_hood = ql_hood,
                 mean_pl_cv = mean_pl_cv,
                 grp_pl_cv = grp_pl_cv,
-                monotone_oracle = monotone_oracle
+                monotone_oracle = monotone_oracle,
+                E_step = E_step,
+                M_step = M_step
               ),
               model = model
   )

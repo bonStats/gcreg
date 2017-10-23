@@ -4,7 +4,7 @@
 \alias{make_em_model_specs}
 \title{Create list with model specifications for polynomial constrained mixed effect model with monotonic mean and (potentially) monotonic random effects.}
 \usage{
-make_em_model_specs(formula, data, p_degree, r_degree, r_constrained,
+make_em_model_specs(formula, data, p_degree, r_degree, r_constrained = F,
   mcontr_region = c(-1, 1), rcontr_region = c(-1, 1), group_name = "grp")
 }
 \arguments{

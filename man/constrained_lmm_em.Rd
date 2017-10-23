@@ -26,6 +26,7 @@ constrained_lmm_em(model, maxit = 200, tol, start = NULL, verbose = F,
 list including estimated mixed effects model.
 }
 \description{
-EXPIREMENTAL: For use with block-random effects (non-crossed). See vignette for usage details.
+EXPIREMENTAL: For use with block-random effects (non-crossed), e.g. subject-specific random effects.
+This function is under development and may change without warning. See the mixed effects vignette for usage details.
 }
 \keyword{internal}
