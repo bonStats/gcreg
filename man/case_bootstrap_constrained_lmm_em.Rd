@@ -5,7 +5,7 @@
 \alias{case_bootstrap_constrained_lmm_em}
 \title{Bootstrap for fitting polynomial constrained mixed effect model with monotonic mean and (potentially) monotonic random effects.}
 \usage{
-case_bootstrap_constrained_lmm_em(model, N, maxit = 30, tol = 0.01, start,
+case_bootstrap_constrained_lmm_em(model, N, maxit = 25, tol = 0.01, start,
   verbose = F, save_steps = F, check_up = F, verbose_boot = verbose,
   parallel = F, cores = 1)
 }
