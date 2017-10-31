@@ -187,11 +187,11 @@ constrained_lmm_mcem <- function(model, maxit = 200, tol, start = NULL, verbose 
     
     for(i in 2:(burnin + maxit)){
       
-      re_st[i,] <- mvtnorm::rmvnorm(n = 1, mean = re_st[i-1,], sigma = prop_var)
+      re_st[i,] <- rmvnorm(n = 1, mean = re_st[i-1,], sigma = prop_var)
       
       if(re_mono_oracle(re_st[i,])){
-        accept_prop <- exp(mvtnorm::dmvnorm(x = re_st[i,], mean = re_mean, sigma = re_var, log = T) - 
-                             mvtnorm::dmvnorm(x = re_st[i-1,], mean = re_mean, sigma = re_var, log = T)
+        accept_prop <- exp(dmvnorm(x = re_st[i,], mean = re_mean, sigma = re_var, log = T) - 
+                             dmvnorm(x = re_st[i-1,], mean = re_mean, sigma = re_var, log = T)
         )
         
         if(runif(1) < accept_prop){ #accept
@@ -245,7 +245,7 @@ constrained_lmm_mcem <- function(model, maxit = 200, tol, start = NULL, verbose 
         
         subject_gam <- gam_mean + c(gam_re, rep(0, times = with(.model_specs, p - r)))
         
-        gcreg::is_monotone(p = .mean_pl_cv$to_mono(subject_gam), region = .rcontr_region)
+        is_monotone(p = .mean_pl_cv$to_mono(subject_gam), region = .rcontr_region)
         
       }
       
@@ -256,7 +256,7 @@ constrained_lmm_mcem <- function(model, maxit = 200, tol, start = NULL, verbose 
       
       while(total < min_sample & i <= rjs_maxit){
         
-        new_rs_rjs <- mvtnorm::rmvnorm(n = min_sample * 2,
+        new_rs_rjs <- rmvnorm(n = min_sample * 2,
                                        mean = mean_var_ls$re_mean,
                                        sigma = mean_var_ls$re_var
         )
@@ -396,7 +396,7 @@ constrained_lmm_mcem <- function(model, maxit = 200, tol, start = NULL, verbose 
       
       subject_gam <- gam + c(gam_re, rep(0, times = with(model$specs, p - r)))
       
-      gcreg::is_monotone(p = mean_pl_cv$to_mono(subject_gam), region = model$rcontr_region)
+      is_monotone(p = mean_pl_cv$to_mono(subject_gam), region = model$rcontr_region)
       
     }
     
@@ -406,7 +406,7 @@ constrained_lmm_mcem <- function(model, maxit = 200, tol, start = NULL, verbose 
     } 
     
     return(
-      numDeriv::grad(func = penalty_fun, x = gam_param, method = "simple", method.args=list(eps=1e-02))
+      grad(func = penalty_fun, x = gam_param, method = "simple", method.args=list(eps=1e-02))
     )
     
   }
@@ -479,7 +479,7 @@ constrained_lmm_mcem <- function(model, maxit = 200, tol, start = NULL, verbose 
       
       subject_gam <- gam_mean + c(gam_re, rep(0, times = with(model$specs, p - r)))
       
-      gcreg::is_monotone(p = mean_pl_cv$to_mono(subject_gam), region = model$rcontr_region)
+      is_monotone(p = mean_pl_cv$to_mono(subject_gam), region = model$rcontr_region)
       
     }
     
@@ -544,7 +544,7 @@ constrained_lmm_mcem <- function(model, maxit = 200, tol, start = NULL, verbose 
       
       subject_gam <- gam_mean + c(gam_re, rep(0, times = with(model$specs, p - r)))
       
-      gcreg::is_monotone(p = mean_pl_cv$to_mono(subject_gam), region = model$rcontr_region)
+      is_monotone(p = mean_pl_cv$to_mono(subject_gam), region = model$rcontr_region)
       
     }
     
@@ -556,7 +556,7 @@ constrained_lmm_mcem <- function(model, maxit = 200, tol, start = NULL, verbose 
     } 
    
     return(
-      numDeriv::grad(func = penalty_fun, x = omeg, method = "simple", method.args=list(eps=1e-02))
+      grad(func = penalty_fun, x = omeg, method = "simple", method.args=list(eps=1e-02))
     )
     
   }
