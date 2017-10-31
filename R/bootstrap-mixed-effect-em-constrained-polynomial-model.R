@@ -40,13 +40,16 @@ case_bootstrap_constrained_lmm_em <- function(model, N, maxit = 25, tol = 1e-02,
     
     sampled_groups <- sample(model$group_ids, replace = T)
     
-    newdata <- model$dat[0,]
+    not_old_group_col <- which(colnames(model$dat) != "grp")
+    
+    newdata <- model$dat[0,not_old_group_col]
     
     for(gr in 1:length(sampled_groups)){
       
       newdata <- rbind(
-        model$dat %>% dplyr::filter(grp == sampled_groups[gr]) %>% mutate(grp = gr),
-        newdata)
+        cbind(model$dat[model$dat$grp == sampled_groups[gr],not_old_group_col], grp = gr),
+        newdata
+        )
       
     }
     
