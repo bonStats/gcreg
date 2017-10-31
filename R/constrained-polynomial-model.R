@@ -135,7 +135,7 @@ cpm <- function(formula, data, subset, weights, na.action,
       sc_oracle_region <- sc_fun_x$scale(c_region)
       # define oracle on scaled boundaries
         # use cv rather than untransform_gam since monotonicity unaffected by data transformations
-      sc_oracle <- function(p) is_monotone(cv$to_mono(p), region = sc_oracle_region)
+      sc_oracle <- function(g) is_monotone(cv$to_mono(g), region = sc_oracle_region)
      if(missing(start)){
        # assumes monotone increasing
        if((degree + 1) %% 2 == 0) {
