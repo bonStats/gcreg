@@ -206,11 +206,11 @@ constrained_lmm_em <- function(model, maxit = 200, tol, start = NULL, verbose = 
   
   #### M-step functions ####
   
-  M_step <- function(em_list, step_size = 0.1){ #remove step size ???
+  M_step <- function(em_list, step_size = 0.1){ #could remove step size
     
     .em <- em_list
     
-    par_st <- gamma_init # if on boundary need to do more work.????
+    par_st <- gamma_init
     
     aim_gamma <- optim(par = em_list$gam,
                        fn = ql_hood_gamma_wrapper,
@@ -581,12 +581,12 @@ constrained_lmm_em <- function(model, maxit = 200, tol, start = NULL, verbose = 
       
     } else if(check_up & i > 1){
       
-      ql_hood_check <- prev_em %>% E_step() %>% ql_hood()
-      #ql_hood_check <- ql_hood_vals[i]
+      #ql_hood_check <- prev_em %>% E_step() %>% ql_hood()
+      ql_hood_check <- ql_hood_vals[i]
       
       if(ql_hood_vals[i+1] > ql_hood_check){ # on divergence scale so should be decreasing
         
-        if(verbose) cat("quasi-log-likelihood did not decrease \n")
+        #if(verbose) cat("quasi-log-likelihood did not decrease \n")
         convg <- T
         convg_status <- paste("quasi-log-likelihood did not decrease")
         ql_hood_vals <- ql_hood_vals[1:(i+1)]
@@ -634,7 +634,7 @@ constrained_lmm_em <- function(model, maxit = 200, tol, start = NULL, verbose = 
   return(list(beta_mean = beta_mean,
               beta_grp = beta_grp,
               H_mat = tcrossprod(make_L_mat(res$omeg)),
-              sig = res$sig2,
+              sig2 = res$sig2,
               res = res,
               em_list = em,
               ql_vals = ql_hood_vals,
