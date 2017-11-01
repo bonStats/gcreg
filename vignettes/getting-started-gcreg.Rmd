@@ -67,23 +67,26 @@ g_oc + geom_line(data = plot_dat, aes(y = height, x = day, colour = model))
 
 ## User-defined constraints
 
-Use the make_oracle() function to define your own constraints.
+Use the make_oracle() function to define your own constraints. This is still under development.
 
 ```{r}
+ # Constraint: T if beta[3] >= 1, F otherwise
+b3_g1 <- function(b){
+  b[3,1] >= 1
+}
 
-# # Constraint: T if beta[2] >= 3, F otherwise
-# b3_g1 <- function(b){
-#   b[3,1] >= 1
-# }
-# 
-# # Initial value
-# start_beta <- runif(n = deg + 1)
-# start_beta[3] <- 10
-# 
-# orc_f <- make_oracle(oracle = b3_g1)
-# 
-# c_model <- cpm(height ~ day, data = fda::onechild, degree = deg, 
-#                oracle = orc_f, start = start_beta, step_start = 0.7)
+deg <- 7
+
+# Initial value
+start_beta <- runif(n = deg + 1)
+start_beta[3] <- 3
+
+orc_f <- make_oracle(oracle = b3_g1)
+
+c_model <- cpm(height ~ day, data = fda::onechild, degree = deg,
+               oracle = orc_f, start = start_beta, step_start = 0.99, method = "down-walk")
+
+c_model
 
 
 ```
