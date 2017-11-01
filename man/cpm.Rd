@@ -28,7 +28,7 @@ cpm(formula, data, subset, weights, na.action, degree, constraint = NULL,
 
 \item{c_region}{the applicable region for the constraint, default is (-Inf,Inf), the real line.}
 
-\item{...}{arguments to be passed to control_cols()}
+\item{...}{arguments to be passed to cols_control()}
 }
 \value{
 Constrained regression model with class \code{creg}

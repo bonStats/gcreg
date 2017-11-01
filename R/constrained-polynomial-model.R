@@ -14,7 +14,7 @@
 #' @param oracle an optional function of class "oracle", returning TRUE when a given point is inside the constrained set and FALSE otherwise.
 #' @param start intial value of COLS optimisation.
 #' @param c_region the applicable region for the constraint, default is (-Inf,Inf), the real line.
-#' @param ... arguments to be passed to control_cols()
+#' @param ... arguments to be passed to cols_control()
 #' @return Constrained regression model with class \code{creg}
 #' @export
 
@@ -185,7 +185,7 @@ cpm <- function(formula, data, subset, weights, na.action,
   
   if(length(init_par) != degree + 1) stop("length of start/init_par is incorrect for specified degree")
   
-  ctrl_list <- cols_control(method = "best-step", ...)
+  ctrl_list <- cols_control(...)
   
   # need to scale init param also
   z <- optim_cols(par = init_par, Y = y_sc, X = Xo, oracle_fun = sc_oracle, control = ctrl_list)

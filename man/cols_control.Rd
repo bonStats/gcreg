@@ -9,7 +9,7 @@ cols_control(method = "best-step", maxit = 200, tol = 1e-05,
   maxit_bumps = 5, tol_bounce = tol)
 }
 \arguments{
-\item{method}{"simple" or "best-step".}
+\item{method}{one of "best-step", "once-best-step", "up-walk", "down-walk", "avoid-boundary"}
 
 \item{maxit}{maximum number of iterations.}
 

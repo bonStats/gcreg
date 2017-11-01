@@ -1,6 +1,6 @@
 #' Create controls attributes which tune the COLS algorithm.
 #' 
-#' @param method "simple" or "best-step".
+#' @param method one of "best-step", "once-best-step", "up-walk", "down-walk", "avoid-boundary"
 #' @param maxit maximum number of iterations.
 #' @param tol tolerance dictating when convergence is reached.
 #' @param step_start the initial step size taken.
