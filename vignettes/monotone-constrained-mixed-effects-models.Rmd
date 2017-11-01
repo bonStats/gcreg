@@ -55,6 +55,7 @@ md <- gcreg:::make_em_model_specs(height2~age2, data = boys_s,
 # verbose = T shows the steps of the quasi-log-likelihood
 boys_em <- gcreg:::constrained_lmm_em(model = md, tol = 1e-02, verbose = T, save_steps = F)
 
-
 ```
+
+Currently `gcreg:::constrained_lmm_em()` returns a list with the relevant values.  Below are some examples interacting with this fits.
 
