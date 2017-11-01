@@ -10,7 +10,7 @@ vignette: >
   %\VignetteDepends{fda,ggplot2,dplyr}
 ---
 
-gcreg fits constrained regression models. The package is currently still being developed and tested, but functionality for constrained polynomial regression models is available with the function cpm(). This vignette will demonstrate some examples of constrained polynomial regression.
+gcreg fits constrained regression models. The functionality and documentation of this package is still being developed. Constrained polynomial regression models can be fitted with the function cpm(). This vignette will demonstrate some examples.
 
 ## Monotonic Regression
 
@@ -67,7 +67,7 @@ g_oc + geom_line(data = plot_dat, aes(y = height, x = day, colour = model))
 
 ## User-defined constraints
 
-Use the make_oracle() function to define your own constraints. This is still under development.
+Use the make_oracle() function to define your own constraints. This is still under development - speed may vary.
 
 ```{r}
  # Constraint: T if beta[3] >= 1, F otherwise
