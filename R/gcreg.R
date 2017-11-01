@@ -7,9 +7,9 @@
 #' @import polynom
 #' @import Matrix
 #' @import dplyr
-#' @import mvtnorm
-#' @import tmvtnorm
-#' @import numDeriv
-#' @import parallel
+#' @importFrom mvtnorm rmvnorm dmvnorm
+#' @importFrom tmvtnorm mtmvnorm
+#' @importFrom numDeriv grad
+#' @importFrom parallel mclapply
 #' @importFrom stats is.empty.model model.matrix model.weights model.response predict var deriv formula napredict naresid coef fitted pnorm dnorm setNames optim rnorm runif
 NULL
