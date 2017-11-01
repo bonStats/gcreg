@@ -1,0 +1,60 @@
+---
+title: "Mixed effects models in gcreg"
+author: "Joshua Bon"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Mixed effects models in gcreg}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{fda,ggplot2,dplyr}
+---
+
+A user interface for constrained mixed effects models is still under development. In the meantime we detail how to access the packages internal functions for monotone-constrained mixed effects models. Currently, these have been developed for models with block-diagonal random effects covariance matrices.
+
+## Model specification 
+
+$\left(\mathcal{Y}|\mathcal{U}=\mathbf{U}\right) \sim \mathcal{N}\left(\mathbf{X}\mathbf{\beta} + \mathbf{Z} \mathbf{U},\sigma^{2}\mathbf{I}\right) \qquad \mathcal{U} \sim \mathcal{N}\left(\mathbf{0},\mathbf{G}\right)$
+
+where $\mathbf{X}$ is a (mean) polynomial design matrix, $\mathbf{Z}$ is the subject-specific polynomial matrix, and $\mathbf{G}$ is a block-diagonal matrix.
+
+## Fit a monotone-constrained mixed effects model
+
+We use a sample from the Berkeley growth data set in fda (Tuddenham and Snyder, 1954). The code below details two subsets of models from the above specification
+
+ - The subject-specific curves, as defined by the random effects, are *unconstrained*.
+ - $r <= 2$ and the subject-specific curves are *constrained*.
+
+```{r, fig.show='hold', fig.cap='fda::growth data', cache=TRUE}
+library(fda)
+library(ggplot2)
+library(dplyr)
+
+# format data
+boys <- fda::growth$hgtm %>% melt(value.name = "height", varnames = c("age","id"))
+
+# take a random sample of 10 boys
+set.seed(2017)
+ids <- boys$id %>% as.character() %>% unique() %>% sample(size = 10, replace = F)
+boys_s <- boys %>% filter(id %in% ids)
+
+#scale data
+b_age_sc <- gen_scale_data_funs(boys_s$age)
+b_height_sc <- gen_scale_data_funs(boys_s$height)
+  
+boys_s <- boys_s %>% mutate(age2 = b_age_sc$scale(age), height2 = b_height_sc$scale(height))
+
+# set up model we wish to fit
+md <- gcreg:::make_em_model_specs(height2~age2, data = boys_s,
+                                    p_degree = 12, r_degree = 5,
+                                    r_constrained = F, # should random effects be constrained
+                                    mcontr_region = c(-1,1),
+                                    group_name = "id"
+                                    )
+
+# verbose = T shows the steps of the quasi-log-likelihood
+boys_em <- gcreg:::constrained_lmm_em(model = md, tol = 1e-02, verbose = T, save_steps = F)
+
+
+```
+
