@@ -46,8 +46,8 @@ boys_s <- boys_s %>% mutate(age2 = b_age_sc$scale(age), height2 = b_height_sc$sc
 
 # set up model we wish to fit
 md <- gcreg:::make_em_model_specs(height2~age2, data = boys_s,
-                                    p_degree = 12, r_degree = 5,
-                                    r_constrained = F, # should random effects be constrained
+                                    p_degree = 8, r_degree = 3,
+                                    r_constrained = F, # should random effects be constrained?
                                     mcontr_region = c(-1,1),
                                     group_name = "id"
                                     )
@@ -57,5 +57,6 @@ boys_em <- gcreg:::constrained_lmm_em(model = md, tol = 1e-02, verbose = T, save
 
 ```
 
-Currently `gcreg:::constrained_lmm_em()` returns a list with the relevant values.  Below are some examples interacting with this fits.
+Currently `gcreg:::constrained_lmm_em()` returns a list with the relevant values.  Below are some examples interacting with the fits.
 
+TO DO...
