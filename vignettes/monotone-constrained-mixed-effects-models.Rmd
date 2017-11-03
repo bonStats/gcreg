@@ -25,7 +25,7 @@ We use a sample from the Berkeley growth data set in fda (Tuddenham and Snyder, 
  - The subject-specific curves, as defined by the random effects, are *unconstrained*.
  - $r <= 2$ and the subject-specific curves are *constrained*.
 
-```{r, fig.show='hold', fig.cap='fda::growth data', cache=TRUE}
+```{r, fig.show='hold', cache=TRUE}
 library(fda)
 library(ggplot2)
 library(dplyr)
@@ -59,4 +59,28 @@ boys_em <- gcreg:::constrained_lmm_em(model = md, tol = 1e-02, verbose = T, save
 
 Currently `gcreg:::constrained_lmm_em()` returns a list with the relevant values.  Below are some examples interacting with the fits.
 
-TO DO...
+```{r, fig.show='hold'}
+
+ fit_points <- seq(-1,1,length.out = 201)
+  
+  fitted_vals <- c(list(mean = boys_em$beta_mean),  boys_em$beta_grp) %>% 
+    lapply(FUN = polynomial) %>%
+    sapply(FUN = predict, newdata = fit_points) %>%
+    cbind(x = fit_points) %>% 
+    as_tibble() %>% 
+    melt(id = "x", variable.name = "grp", value.name = "y")
+  
+    x_brks <- seq(0,18,by = 2)
+    y_brks <- seq(60,200,by = 20)
+  
+    ggplot() + 
+    geom_line(data = fitted_vals, aes(x = x, y = y)) + 
+    geom_point(data = md$dat, aes(y = y,x = x),size = 0.1) + 
+    facet_wrap(~grp) + theme_bw() +
+    scale_x_continuous("Age (years)", labels = x_brks, breaks = b_age_sc$scale(x_brks)) +
+    scale_y_continuous("Height (cm)", labels = y_brks, breaks = b_height_sc$scale(y_brks))
+
+
+```
+
+Note that some of the subject-specific curves still have non-monotonic areas around 16-18 years. If we wish to correct for this we should constrain the subject-specific curves to be monotonic. This can be done with `gcreg:::constrained_lmm_em()` if $r <= 2$ or `gcreg:::constrained_lmm_mcem()` otherwise. The latter is uses Monte Carlo Expectation Maximisation algorithm, hence is more computationally expensive. 
