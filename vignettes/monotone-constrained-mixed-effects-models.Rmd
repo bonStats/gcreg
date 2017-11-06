@@ -7,7 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Mixed effects models in gcreg}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-  %\VignetteDepends{fda,ggplot2,dplyr}
+  %\VignetteDepends{fda,ggplot2,dplyr,reshape2}
 ---
 
 A user interface for constrained mixed effects models is still under development. In the meantime we detail how to access the packages internal functions for monotone-constrained mixed effects models. Currently, these have been developed for models with block-diagonal random effects covariance matrices.
@@ -28,6 +28,7 @@ We use a sample from the Berkeley growth data set in fda (Tuddenham and Snyder, 
 ```{r, fig.show='hold', cache=TRUE}
 library(fda)
 library(ggplot2)
+library(reshape2)
 library(dplyr)
 
 # format data
