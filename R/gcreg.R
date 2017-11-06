@@ -7,7 +7,7 @@
 #' @import polynom
 #' @import Matrix
 #' @import dplyr
-#' @importFrom mvtnorm rmvnorm dmvnorm
+#' @importFrom mvtnorm rmvnorm dmvnorm TVPACK
 #' @importFrom tmvtnorm mtmvnorm
 #' @importFrom numDeriv grad
 #' @importFrom parallel mclapply
