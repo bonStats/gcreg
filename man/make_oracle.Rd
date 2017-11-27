@@ -2,7 +2,7 @@
 % Please edit documentation in R/make-oracle.R
 \name{make_oracle}
 \alias{make_oracle}
-\title{WIP: Methods for manipulating oracle functions}
+\title{Create oracle function for constrained polynomial fitting}
 \usage{
 make_oracle(oracle, region = c(-Inf, Inf))
 }
@@ -15,9 +15,12 @@ make_oracle(oracle, region = c(-Inf, Inf))
 function that returns TRUE if point satisfies oracle, FALSE otherwise.
 }
 \description{
-WIP: Methods for manipulating oracle functions
+For use with \code{\link{cpm}}. See getting started vignette for details.
 }
 \examples{
-#To do
+\dontrun{
+constraint_oracle <- make_oracle( function(b) { b[1,] > 1 })
+# In general, variable b should be treated as a matrix.
+}
 
 }

@@ -1,22 +1,35 @@
-#' Determine the least squares estimates of a constrained polynomial regression
+#' Least squares estimates of a constrained polynomial regression
 #' 
 #' Estimates univariate polynomials with parameters from a closed convex set. 
 #' Some examples are shape constraints (e.g. montonicity, convexity) or simply linear parameter constraints
 #' such as \eqn{\beta_{1} >= 0}{\beta [1] >= 0}.
 #' 
-#' @param formula an object of class "formula" (or one that can be coerced to that class): a symbolic description of the model to be fitted.
-#' @param data an optional data frame, list or environment (or object coercible by as.data.frame to a data frame) containing the variables in the model. If not found in data, the variables are taken from environment(formula), typically the environment from which the function is called.
+#' 
+#' @param formula an object of class \code{formula} (or one that can be coerced to that class): a symbolic description of the model to be fitted.
+#' @param data an optional data frame, list or environment (or object coercible by as.data.frame to a data frame) containing the variables in the model. If not found in data, the variables are taken from \code{environment(formula)}, typically the environment from which the function is called.
 #' @param subset NOT YET IMPLEMENTED an optional vector specifying a subset of observations to be used in the fitting process.
-#' @param weights NOT YET IMPLEMENTED
+#' @param weights NOT YET IMPLEMENTED.
 #' @param na.action a function which indicates what should happen when the data contain NAs. The default is set by the na.action setting of options, and is na.fail if that is unset. The 'factory-fresh' default is na.omit. Another possible value is NULL, no action. Value na.exclude can be useful.
-#' @param degree degree of polynomial to be fit
-#' @param constraint an optional character string of "monotone" ("convex" coming soon)
-#' @param oracle an optional function of class "oracle", returning TRUE when a given point is inside the constrained set and FALSE otherwise.
+#' @param degree degree of polynomial to be fit.
+#' @param constraint an optional character string of "monotone" ("convex" coming soon).
+#' @param oracle an optional function of class \code{oracle}, returning TRUE when a given point is inside the constrained set and FALSE otherwise. See \code{\link{make_oracle}}.
 #' @param start intial value of COLS optimisation.
-#' @param c_region the applicable region for the constraint, default is (-Inf,Inf), the real line.
-#' @param ... arguments to be passed to cols_control()
-#' @return Constrained regression model with class \code{creg}
+#' @param c_region the applicable region for the constraint, default is \code{c(-Inf,Inf)}, the real line.
+#' @param ... arguments to be passed to \code{\link{cols_control}}.
+#' @return Constrained regression model with class \code{creg}. Currently a named list including objects: \code{beta} (parameter vector), \code{fitted.values}, \code{residuals}, and \code{RSS}.
 #' @export
+#' @examples 
+#' \dontrun{
+#' md <- cpm(y ~ x, degree = 5, constraint = "monotone", c_region = c(0,1))
+#' print(md)
+#' coef(md)
+#' residuals(md)
+#' fitted(md)
+#' 
+#' library(polynom)
+#' fitted_pl <- polynomial(coef(md))
+#' plot(fitted_pl, c(0,1))
+#' }
 
 cpm <- function(formula, data, subset, weights, na.action,
                 degree, constraint = NULL, oracle = NULL, start, c_region = c(-Inf,Inf), ...) {

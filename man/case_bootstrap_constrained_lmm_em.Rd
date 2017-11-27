@@ -3,16 +3,16 @@
 %   R/bootstrap-mixed-effect-em-constrained-polynomial-model.R
 \name{case_bootstrap_constrained_lmm_em}
 \alias{case_bootstrap_constrained_lmm_em}
-\title{Bootstrap for fitting polynomial constrained mixed effect model with monotonic mean and (potentially) monotonic random effects.}
+\title{Bootstrap for monotone-constrained polynomial LMM}
 \usage{
 case_bootstrap_constrained_lmm_em(model, N, maxit = 25, tol = 0.01, start,
   verbose = F, save_steps = F, check_up = F, verbose_boot = verbose,
   parallel = F, cores = 1)
 }
 \arguments{
-\item{model}{model specification made by gcreg:::make_em_model_specs().}
+\item{model}{model specification made by \code{\link{make_em_model_specs}}.}
 
-\item{N}{}
+\item{N}{bootstrap size.}
 
 \item{maxit}{maximum number of iterations for each resample.}
 
@@ -33,13 +33,14 @@ case_bootstrap_constrained_lmm_em(model, N, maxit = 25, tol = 0.01, start,
 \item{cores}{Number of cores to use.}
 }
 \value{
-list including estimated mixed effects model.
+list including estimated mixed effects model(s).
 }
 \description{
-EXPIREMENTAL: For use with block-random effects (non-crossed), e.g. subject-specific random effects.
-This function is under development and may change without warning. See the mixed effects vignette for usage details.
+EXPIREMENTAL: Bootstrap for fitting polynomial constrained mixed effect model with monotonic mean and (potentially) monotonic random effects.
+For use with block-random effects (non-crossed), e.g. subject-specific random effects.
 }
 \details{
+The interface and default actions of this function are under development and may change without warning. See the mixed effects vignette for usage details.
 Uses case bootstrapping, where a sample of groups is chosen with replacement and the new estimates are used.
 }
 \keyword{internal}

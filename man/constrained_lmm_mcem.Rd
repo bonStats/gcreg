@@ -3,14 +3,14 @@
 %   R/mixed-effect-mcem-constrained-polynomial-model.R
 \name{constrained_lmm_mcem}
 \alias{constrained_lmm_mcem}
-\title{Fit polynomial constrained mixed effect model with monotonic mean and monotonic random effects.}
+\title{Fit monotone-constrained polynomial LMM with an MCEM algorithm}
 \usage{
 constrained_lmm_mcem(model, maxit = 200, tol, start = NULL, verbose = F,
   save_steps = F, check_up = F, parallel = F, cores = 1,
   ni_ssize = 20000)
 }
 \arguments{
-\item{model}{model specification made by make_em_model_specs().}
+\item{model}{model specification made by \code{\link{make_em_model_specs}}.}
 
 \item{maxit}{maximum number of iterations.}
 
@@ -34,7 +34,10 @@ constrained_lmm_mcem(model, maxit = 200, tol, start = NULL, verbose = F,
 list including estimated mixed effects model.
 }
 \description{
-EXPIREMENTAL: For use with block-random effects (non-crossed), e.g. subject-specific random effects.
-This function is under development and may change without warning. See the mixed effects vignette for usage details.
+EXPIREMENTAL: Fit polynomial constrained mixed effect model with BOTH monotonic mean and monotonic random effects.
+For use with block-random effects (non-crossed), e.g. subject-specific random effects. Uses a Monte Carlo expectation step.
+}
+\details{
+The interface and default actions of this function are under development and may change without warning. See the mixed effects vignette for usage details.
 }
 \keyword{internal}

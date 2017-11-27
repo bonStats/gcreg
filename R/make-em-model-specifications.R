@@ -1,20 +1,23 @@
-#' Create list with model specifications for polynomial constrained mixed effect model with monotonic mean and (potentially) monotonic random effects.
+#' Specify model for a monotone-constrained polynomial LMM
 #' 
-#' EXPIREMENTAL: See vignette for usage details.
+#' EXPIREMENTAL: Creates a list with model specifications for polynomial constrained mixed effect model with monotonic mean and (potentially) monotonic random effects.
+#' For use with \code{\link{constrained_lmm_em}} and \code{\link{constrained_lmm_mcem}}. See mixed effects vignette for usage details.
+#'
+#' The interface and default actions of this function are under development and may change without warning. See the mixed effects vignette for usage details.
 #' 
 #' @param formula Usage: y ~ x, replaced by actual names.
 #' @param data data.frame containing y and x.
 #' @param p_degree degree of mean polynomial.
 #' @param r_degree degree of polynomial random effects.
-#' @param r_constrained should the polynomial random effects be constrained? Only implemented for r_degree= 0, 1.
+#' @param r_constrained should the polynomial random effects be constrained?
 #' @param mcontr_region Over what region should monotonicity apply to the mean polynomial?
-#' @param rcontr_region Over what region should monotonicity apply to the random effects polynomials?
+#' @param rcontr_region Over what region should monotonicity apply to the random effects polynomials? Defaults to (and generally should be) \code{mcontr_region}.
 #' @param group_name character column name of group in data.
 #' @keywords internal
-#' @return list to be passed to constrained_lmm_em() for fitting model.
+#' @return list speficying model to be passed to fitting methods.
 
 
-make_em_model_specs <- function(formula, data, p_degree, r_degree, r_constrained = F, mcontr_region = c(-1,1), rcontr_region = c(-1,1), group_name = "grp"){
+make_em_model_specs <- function(formula, data, p_degree, r_degree, r_constrained = F, mcontr_region = c(-1,1), rcontr_region = mcontr_region, group_name = "grp"){
   
   vars <- all.vars(formula)
   if(length(vars) != 2) stop("Specify forumla as: 'y ~ x' and specify degree by 'p_degree'")

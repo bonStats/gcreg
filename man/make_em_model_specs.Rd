@@ -2,10 +2,11 @@
 % Please edit documentation in R/make-em-model-specifications.R
 \name{make_em_model_specs}
 \alias{make_em_model_specs}
-\title{Create list with model specifications for polynomial constrained mixed effect model with monotonic mean and (potentially) monotonic random effects.}
+\title{Specify model for a monotone-constrained polynomial LMM}
 \usage{
 make_em_model_specs(formula, data, p_degree, r_degree, r_constrained = F,
-  mcontr_region = c(-1, 1), rcontr_region = c(-1, 1), group_name = "grp")
+  mcontr_region = c(-1, 1), rcontr_region = mcontr_region,
+  group_name = "grp")
 }
 \arguments{
 \item{formula}{Usage: y ~ x, replaced by actual names.}
@@ -16,18 +17,22 @@ make_em_model_specs(formula, data, p_degree, r_degree, r_constrained = F,
 
 \item{r_degree}{degree of polynomial random effects.}
 
-\item{r_constrained}{should the polynomial random effects be constrained? Only implemented for r_degree= 0, 1.}
+\item{r_constrained}{should the polynomial random effects be constrained?}
 
 \item{mcontr_region}{Over what region should monotonicity apply to the mean polynomial?}
 
-\item{rcontr_region}{Over what region should monotonicity apply to the random effects polynomials?}
+\item{rcontr_region}{Over what region should monotonicity apply to the random effects polynomials? Defaults to (and generally should be) \code{mcontr_region}.}
 
 \item{group_name}{character column name of group in data.}
 }
 \value{
-list to be passed to constrained_lmm_em() for fitting model.
+list speficying model to be passed to fitting methods.
 }
 \description{
-EXPIREMENTAL: See vignette for usage details.
+EXPIREMENTAL: Creates a list with model specifications for polynomial constrained mixed effect model with monotonic mean and (potentially) monotonic random effects.
+For use with \code{\link{constrained_lmm_em}} and \code{\link{constrained_lmm_mcem}}. See mixed effects vignette for usage details.
+}
+\details{
+The interface and default actions of this function are under development and may change without warning. See the mixed effects vignette for usage details.
 }
 \keyword{internal}

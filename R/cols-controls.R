@@ -11,7 +11,8 @@
 #' @return a list of control parameters.
 #' @export
 #' @examples
-#' #TO DO
+#' cols_control(maxit = 100)
+#' 
 
 
 cols_control <- function(method = "best-step", maxit = 200, tol = 1e-05, step_start = 0.7, step_increment = 0.05, maxit_bounces = 2, maxit_bumps = 5, tol_bounce = tol){

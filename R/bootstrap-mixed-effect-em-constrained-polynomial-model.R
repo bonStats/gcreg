@@ -1,12 +1,13 @@
-#' Bootstrap for fitting polynomial constrained mixed effect model with monotonic mean and (potentially) monotonic random effects.
+#' Bootstrap for monotone-constrained polynomial LMM
 #' 
-#' EXPIREMENTAL: For use with block-random effects (non-crossed), e.g. subject-specific random effects.
-#' This function is under development and may change without warning. See the mixed effects vignette for usage details.
+#' EXPIREMENTAL: Bootstrap for fitting polynomial constrained mixed effect model with monotonic mean and (potentially) monotonic random effects.
+#' For use with block-random effects (non-crossed), e.g. subject-specific random effects.
 #' 
+#' The interface and default actions of this function are under development and may change without warning. See the mixed effects vignette for usage details.
 #' Uses case bootstrapping, where a sample of groups is chosen with replacement and the new estimates are used.
 #' 
-#' @param model model specification made by gcreg:::make_em_model_specs().
-#' @param N 
+#' @param model model specification made by \code{\link{make_em_model_specs}}.
+#' @param N bootstrap size.
 #' @param maxit maximum number of iterations for each resample.
 #' @param tol relative tolerance for convergence of parameter values for each resample.
 #' @param start start values for parameters for each resample. Defaults to NULL.
@@ -17,7 +18,7 @@
 #' @param parallel Execute in parallel. This will turn off verbose settings. ONLY IMPLEMENTED FOR LINUX/MAC
 #' @param cores Number of cores to use.
 #' @keywords internal
-#' @return list including estimated mixed effects model.
+#' @return list including estimated mixed effects model(s).
 #' 
 
 case_bootstrap_constrained_lmm_em <- function(model, N, maxit = 25, tol = 1e-02, start, verbose = F, save_steps = F, check_up = F, verbose_boot = verbose, parallel = F, cores = 1){

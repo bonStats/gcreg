@@ -32,5 +32,6 @@ a list of control parameters.
 Create controls attributes which tune the COLS algorithm.
 }
 \examples{
-#TO DO
+cols_control(maxit = 100)
+
 }

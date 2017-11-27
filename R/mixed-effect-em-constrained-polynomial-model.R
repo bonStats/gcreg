@@ -1,9 +1,12 @@
-#' Fit polynomial constrained mixed effect model with monotonic mean and (potentially) monotonic random effects.
+#' Fit monotone-constrained polynomial LMM with an EM algorithm
 #' 
-#' EXPIREMENTAL: For use with block-random effects (non-crossed), e.g. subject-specific random effects.
-#' This function is under development and may change without warning. See the mixed effects vignette for usage details.
+#' EXPIREMENTAL: Fit polynomial constrained mixed effect model with monotonic mean and (potentially) monotonic random effects (\eqn{r <= 2} for monotone random effects). 
+#' See \code{\link{constrained_lmm_mcem}} for (\eqn{r > 2}).
+#' For use with block-random effects (non-crossed), e.g. subject-specific random effects.
 #' 
-#' @param model model specification made by make_em_model_specs().
+#' The interface and default actions of this function are under development and may change without warning. See the mixed effects vignette for usage details.
+#' 
+#' @param model model specification made by \code{\link{make_em_model_specs}}.
 #' @param maxit maximum number of iterations.
 #' @param tol relative tolerance for convergence of parameter values.
 #' @param start start values for parameters. Defaults to NULL.
