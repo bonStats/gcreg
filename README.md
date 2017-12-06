@@ -15,6 +15,14 @@ devtools::install_github("bonStats/gcreg")
 library(gcreg)
 ```
 
+To install with vignettes you will need to install some required packages and set `build_vignettes = T`:
+```r
+install.packages(c("rmarkdown","ggplot2","fda"))
+devtools::install_github("bonStats/gcreg", build_vignettes = T)
+library(gcreg)
+```
+
+
 You can start fitting constrained polynomial models with the `gcreg::cpm()` function. For example
 
 ```r 
