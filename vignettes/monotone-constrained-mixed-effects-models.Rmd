@@ -30,6 +30,7 @@ library(fda)
 library(ggplot2)
 library(reshape2)
 library(dplyr)
+library(gcreg)
 
 # format data
 boys <- fda::growth$hgtm %>% melt(value.name = "height", varnames = c("age","id"))
