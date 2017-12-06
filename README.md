@@ -11,7 +11,7 @@ The current focus of development is on monotonicity in polynomial fixed and mixe
 To get started, install this package from GitHub using the `devtools` package:
 
 ```r
-devtools::install_github("bonStats/gcreg")
+devtools::install_github("bonStats/gcreg", build_vignettes = T, )
 library(gcreg)
 ```
 
