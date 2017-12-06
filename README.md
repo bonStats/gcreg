@@ -30,4 +30,6 @@ library(fda)
 data(onechild)
 cpm(height~day, data = onechild, degree = 5, constraint = "monotone", c_region = c(1,312))
 ```
-See the package vignettes for more examples.
+See the package vignettes for more examples:
+* [Fixed effects constrained polynomial models](https://github.com/bonStats/gcreg/files/1516836/getting-started-gcreg.pdf) (Updated: 2017-12-01)
+* [Mixed effects constrained polynomial models](https://github.com/bonStats/gcreg/files/1516820/monotone-constrained-mixed-effects-models.pdf) (Updated: 2017-12-01)
