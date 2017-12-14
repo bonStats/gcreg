@@ -4,12 +4,14 @@
 \alias{make_em_model_specs}
 \title{Specify model for a monotone-constrained polynomial LMM}
 \usage{
-make_em_model_specs(formula, data, p_degree, r_degree, r_constrained = F,
-  mcontr_region = c(-1, 1), rcontr_region = mcontr_region,
-  group_name = "grp")
+make_em_model_specs(formula, group_name = "grp", data, p_degree, r_degree,
+  r_constrained = F, mcontr_region = c(-1, 1),
+  rcontr_region = mcontr_region)
 }
 \arguments{
 \item{formula}{Usage: y ~ x, replaced by actual names.}
+
+\item{group_name}{character column name of group in data.}
 
 \item{data}{data.frame containing y and x.}
 
@@ -22,8 +24,6 @@ make_em_model_specs(formula, data, p_degree, r_degree, r_constrained = F,
 \item{mcontr_region}{Over what region should monotonicity apply to the mean polynomial?}
 
 \item{rcontr_region}{Over what region should monotonicity apply to the random effects polynomials? Defaults to (and generally should be) \code{mcontr_region}.}
-
-\item{group_name}{character column name of group in data.}
 }
 \value{
 list speficying model to be passed to fitting methods.
