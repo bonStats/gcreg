@@ -6,40 +6,36 @@
 #' The interface and default actions of this function are under development and may change without warning. See the mixed effects vignette for usage details.
 #' 
 #' @param formula Usage: y ~ x, replaced by actual names.
+#' @param group_name character column name of group in data.
 #' @param data data.frame containing y and x.
 #' @param p_degree degree of mean polynomial.
 #' @param r_degree degree of polynomial random effects.
 #' @param r_constrained should the polynomial random effects be constrained?
 #' @param mcontr_region Over what region should monotonicity apply to the mean polynomial?
 #' @param rcontr_region Over what region should monotonicity apply to the random effects polynomials? Defaults to (and generally should be) \code{mcontr_region}.
-#' @param group_name character column name of group in data.
 #' @keywords internal
 #' @return list speficying model to be passed to fitting methods.
 
 
-make_em_model_specs <- function(formula, data, p_degree, r_degree, r_constrained = F, mcontr_region = c(-1,1), rcontr_region = mcontr_region, group_name = "grp"){
+make_em_model_specs <- function(formula, group_name = "grp", data, p_degree, r_degree, r_constrained = F, mcontr_region = c(-1,1), rcontr_region = mcontr_region){
   
   vars <- all.vars(formula)
   if(length(vars) != 2) stop("Specify forumla as: 'y ~ x' and specify degree by 'p_degree'")
   
-  name_changes <- setNames(list(vars[1], vars[2], group_name), c("y","x","grp"))
+  old_vars <- c(vars[1], vars[2], group_name)
   
-  new_data <- data %>% 
-    rename_(.dots = name_changes)
+  name_changes <- setNames(c("y","x","grp"), old_vars)
   
-  md_specs <-  new_data %>%
-    summarise(N = n(),
-              g = n_distinct(new_data$grp) # avoiding NSE in package.
-    ) %>%
-    mutate(p = p_degree + 1, 
-           r = r_degree + 1, 
-           constr_r = r_constrained
-    )
+  new_data <- data[,old_vars]
+  colnames(new_data) <- name_changes[old_vars]
   
-  if(with(md_specs, r >= 3 & constr_r)){
-    warning("Constrained random effects not yet implemented for r_degree >= 2, setting 'constr_r' to FALSE")
-    md_specs$constr_r <- F
-  }
+  md_specs <-  list()
+    
+  md_specs$N <- nrow(new_data)
+  md_specs$g <- length(unique(new_data$grp))
+  md_specs$p = p_degree + 1 
+  md_specs$r = r_degree + 1 
+  md_specs$constr_r = r_constrained
   
   if(max(mcontr_region) < max(rcontr_region) | min(mcontr_region) > min(rcontr_region)) warning("Defining constrained range of grp to be wider than constrained range of mean not advised")
   
