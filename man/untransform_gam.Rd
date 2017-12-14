@@ -16,7 +16,7 @@ untransform_gam(g, sc_x_f, sc_y_f, cv)
 \item{cv}{orthogonal basis converter functions created by \code{\link{gen_poly_basis_converters}}.}
 }
 \description{
-beta = standard polynomial coefficients w.r.t. raw data
-.
-gamma = orthogonalised polynomial coefficients w.r.t. scaled data (\eqn{-1 < x, y < 1}).
+beta (\code{b}) is standard polynomial coefficients w.r.t. raw data.
+gamma (\code{g}) is the orthogonalised polynomial coefficients w.r.t. scaled data (\eqn{-1 < x, y < 1}).
+See \code{\link{transform_beta}} for inverse transformation.
 }
