@@ -14,7 +14,7 @@
 #' @name gcreg
 #' @import polynom
 #' @import Matrix
-#' @import dplyr
+#' @importFrom magrittr %>%
 #' @importFrom mvtnorm rmvnorm dmvnorm TVPACK
 #' @importFrom tmvtnorm mtmvnorm
 #' @importFrom numDeriv grad

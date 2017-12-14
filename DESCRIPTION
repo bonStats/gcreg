@@ -10,9 +10,9 @@ LazyData: TRUE
 URL: http://github.com/bonStats/gcreg/
 BugReports: http://github.com/bonStats/gcreg/issues
 Depends: polynom,
-    Matrix,
-    dplyr
-Imports:mvtnorm,
+    Matrix
+Imports: magrittr,
+    mvtnorm,
     tmvtnorm,
     numDeriv,
     parallel
@@ -20,6 +20,7 @@ RoxygenNote: 6.0.1
 Suggests: testthat,
     knitr,
     rmarkdown,
+    dplyr,
     ggplot2,
     reshape2,
     fda,
