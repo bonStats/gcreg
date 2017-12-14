@@ -81,60 +81,9 @@ cpm <- function(formula, data, subset, weights, na.action,
   cv <- gen_poly_basis_converters(poly_basis)
   
   # removes orthonormality and data transformation 
-  untransform_gam <- function(gam){
-    
-    # un-orthonormalise (discrete polynomial orthogonalisation)
-    sc_xy_beta_par <- as.numeric(cv$to_mono(gam))
-    
-    len <- length(sc_xy_beta_par)
-    
-    # unscale y
-    sc_x_beta_par <- replace(sc_xy_beta_par, 1, sc_xy_beta_par[1] - attr(sc_fun_y,"c")) / attr(sc_fun_y,"b")
-    
-    # un-scale (range of x data was set to between -1 and 1).
-    b_unsc <- attr(sc_fun_x,"b") ^ (0:degree)
-    sc_x_origin_pl <- polynomial(sc_x_beta_par * b_unsc)
-    
-    beta_pl <- change.origin(sc_x_origin_pl, o = attr(sc_fun_x,"c")/attr(sc_fun_x,"b"))
-    
-    beta_num <- as.numeric(beta_pl)
-    
-    beta_par <- rep(0, times = len)
-    beta_par[1:length(beta_num)] <- beta_num
-    
-    attr(beta_par, "beta_pl") <- beta_pl
-    
-    return(beta_par)
-
-  }
+  untrf_gam <- function(gam) untransform_gam(g = gam, sc_x_f = sc_fun_x, sc_y_f = sc_fun_y, cv = cv)
   
-  transform_beta <- function(beta){
-    
-    beta_par <- as.numeric(beta)
-    
-    len <- length(beta_par)
-    
-    #scale x (range of x data was set to between -1 and 1)
-    b_unsc <- attr(sc_fun_x,"b") ^ (0:degree)
-    sc_x_beta_par <- beta_par / b_unsc
-    
-    sc_x_beta <- as.numeric(
-      change.origin(polynomial(sc_x_beta_par), o = - attr(sc_fun_x,"c"))
-    )
-    
-    sc_x_beta_par <- rep(0, times = len)
-    sc_x_beta_par[1:length(sc_x_beta)] <- sc_x_beta
-    
-    # scale y
-    sc_xy_beta_par <- as.numeric(sc_x_beta_par) * attr(sc_fun_y,"b")
-    sc_xy_beta_par <- replace(sc_xy_beta_par, 1, sc_xy_beta_par[1] + attr(sc_fun_y,"c"))
-    
-    # un-orthonormalise (discrete polynomial orthogonalisation)
-    gam <- as.numeric(cv$to_ortho(sc_xy_beta_par))
-    
-    return(gam)
-    
-  }
+  trf_beta <- function(beta) trf_beta(b = beta, sc_x_f = sc_fun_x, sc_y_f = sc_fun_y, cv = cv)
   
   if (!missing(constraint)){ 
     if(!missing(oracle)) warning("Only specify one of 'constraint' and 'oracle'. Using 'constraint', 'oracle' argument ignored.")
@@ -147,7 +96,7 @@ cpm <- function(formula, data, subset, weights, na.action,
       # convert boundary to scale data
       sc_oracle_region <- sc_fun_x$scale(c_region)
       # define oracle on scaled boundaries
-        # use cv rather than untransform_gam since monotonicity unaffected by data transformations
+        # use cv rather than untrf_gam since monotonicity unaffected by data transformations
       sc_oracle <- function(g) is_monotone(cv$to_mono(g), region = sc_oracle_region)
      if(missing(start)){
        # assumes monotone increasing
@@ -172,7 +121,7 @@ cpm <- function(formula, data, subset, weights, na.action,
     if(missing(start)) stop("Please provide initial parameter when using the oracle = argument.")
     init_par_in <- oracle(start)
     oracle_region <- attr(init_par_in, "region")
-    init_par <- transform_beta(start)
+    init_par <- trf_beta(start)
     
     if(is.null(oracle_region)) {
       warning("No boundaries specified in attributes of return of oracle function, assuming constraining region is: (", paste(c_region,collapse = ","),")")
@@ -186,9 +135,9 @@ cpm <- function(formula, data, subset, weights, na.action,
     region_arg_exists <- !is.null(formals(oracle)$region)
     
     if(region_arg_exists & !missing(c_region)){
-      sc_oracle <- function(g) {oracle(untransform_gam(g), region = c_region)}
+      sc_oracle <- function(g) {oracle(untrf_gam(g), region = c_region)}
     } else {
-      sc_oracle <- function(g) {oracle(untransform_gam(g))}
+      sc_oracle <- function(g) {oracle(untrf_gam(g))}
     }
     
   }
@@ -214,7 +163,7 @@ cpm <- function(formula, data, subset, weights, na.action,
     }
   }
   
-  beta_par <- untransform_gam(gam = z)
+  beta_par <- untrf_gam(gam = z)
   beta_pl <- attr(beta_par, "beta_pl")
   attributes(beta_par) <- NULL
   
