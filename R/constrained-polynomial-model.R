@@ -81,9 +81,9 @@ cpm <- function(formula, data, subset, weights, na.action,
   cv <- gen_poly_basis_converters(poly_basis)
   
   # removes orthonormality and data transformation 
-  untrf_gam <- function(gam) untransform_gam(g = gam, sc_x_f = sc_fun_x, sc_y_f = sc_fun_y, cv = cv)
+  untrf_gam <- function(gam){ untransform_gam(g = gam, sc_x_f = sc_fun_x, sc_y_f = sc_fun_y, cv = cv) }
   
-  trf_beta <- function(beta) trf_beta(b = beta, sc_x_f = sc_fun_x, sc_y_f = sc_fun_y, cv = cv)
+  trf_beta <- function(beta){ transform_beta(b = beta, sc_x_f = sc_fun_x, sc_y_f = sc_fun_y, cv = cv) }
   
   if (!missing(constraint)){ 
     if(!missing(oracle)) warning("Only specify one of 'constraint' and 'oracle'. Using 'constraint', 'oracle' argument ignored.")
