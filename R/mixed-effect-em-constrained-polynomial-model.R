@@ -259,9 +259,9 @@ constrained_lmm_em <- function(model, maxit = 200, tol, start = NULL, verbose = 
                           # lower/upper bounds stop numerical difficulty with solve(L). Should generically decide on these based on problem size.
       )
 
+      .em$omeg <- opt_omegas$par
+      
     }
-    
-    .em$omeg <- opt_omegas$par
 
     return(.em)
   }
