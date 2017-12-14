@@ -1,8 +1,8 @@
 #' Transform beta to gamma polynomial coefficients
 #' 
-#' beta = standard polynomial coefficients w.r.t. raw data.
-#' 
-#' gamma = orthogonalised polynomial coefficients w.r.t. scaled data (\eqn{-1 < x, y < 1}).
+#' \code{b} or beta is standard polynomial coefficients w.r.t. raw data. \code{g} or
+#' gamma is the orthogonalised polynomial coefficients w.r.t. scaled data (\eqn{-1 < x, y < 1}).
+#' See \code{\link{untransform_gam}} for inverse transformation.
 #' 
 #' @param b beta, standard polynomial coefficients w.r.t. raw data.
 #' @param g gamma, orthogonalised polynomial coefficients w.r.t. scaled data (\eqn{-1 < x, y < 1}).
@@ -41,9 +41,9 @@ transform_beta <- function(b, sc_x_f, sc_y_f, cv){
 
 #' Transform gamma to beta polynomial coefficients
 #' 
-#' beta = standard polynomial coefficients w.r.t. raw data
-#' .
-#' gamma = orthogonalised polynomial coefficients w.r.t. scaled data (\eqn{-1 < x, y < 1}).
+#' \code{b} or beta is standard polynomial coefficients w.r.t. raw data. \code{g} or
+#' gamma is the orthogonalised polynomial coefficients w.r.t. scaled data (\eqn{-1 < x, y < 1}).
+#' See \code{\link{transform_beta}} for inverse transformation.
 #' 
 #' @inheritParams transform_beta
 #' @export
