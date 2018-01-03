@@ -6,6 +6,8 @@ This package is currently being developed. It's aim is to provide methods for fi
 * Joint constraints, e.g. combinations of the above
 * Other constraints that create closed and convex parameter spaces
 
+The paper accompanying this package is available [here](http://rdcu.be/C9vg).
+
 The current focus of development is on monotonicity in polynomial fixed and mixed effects models but will be extended over time to more general models and constraints. 
 
 To get started, install this package from GitHub using the `devtools` package:
